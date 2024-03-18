@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_favorite" />
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.weatherapplication.HomeFragment"
+        android:name="com.example.weatherapplication.home.view.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
