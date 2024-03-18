@@ -4,7 +4,7 @@ data class WeatherResponse(
     val cod: String,
     val message: Int,
     val cnt: Int,
-    val list: List<Forecast>,
+    val list: MutableList<Forecast>,
     val city: City
 )
 
@@ -27,7 +27,7 @@ data class Coord(
 data class Forecast(
     val dt: Long,
     val main: Main,
-    val weather: List<Weather>,
+    val weather: MutableList<Weather>,
     val clouds: Clouds,
     val wind: Wind,
     val visibility: Int,

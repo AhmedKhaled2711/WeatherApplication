@@ -1,5 +1,6 @@
 package com.example.weatherapplication.home.viewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,17 +17,23 @@ class HomeViewModel(private var repository: Repository)
     var weatherDetails: LiveData<WeatherResponse> = _weatherDetails
 
     init {
-        getWeatherDetails(30.033333 , 31.233334 , "30a73a92f374a05cbcd5f6b8caeacab0")
+        getWeatherDetails(30.0444 , 31.2357 , "30a73a92f374a05cbcd5f6b8caeacab0")
+        Log.i("Tag", "Test : HomeViewModel")
     }
-    private fun getWeatherDetails(lat: Double,
-                                  lon: Double,
-                                  apiKey: String
+     fun getWeatherDetails(lat: Double,
+                           lon: Double,
+                           apiKey: String
     ){
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.getWeather(lat , lon , apiKey)
             if (response.isSuccessful){
                 _weatherDetails.postValue(response.body())
+                Log.i("Tag", "getWeatherDetails: ${response.body()?.list?.get(0)?.main?.humidity}")
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
     }
 }

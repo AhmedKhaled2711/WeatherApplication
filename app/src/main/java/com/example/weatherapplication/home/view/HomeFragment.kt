@@ -33,15 +33,16 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         Log.i("Tag", " Tesssssssssssssssssssst ")
+        //viewModel.getWeatherDetails(30.03 , 31.23, "30a73a92f374a05cbcd5f6b8caeacab0")
     }
 
     private fun initViewModel(){
-        val remoteDataSource : WeatherRemoteDataSource = WeatherRemoteDataSourceImpl.getInstance()
+        val remoteDataSource : WeatherRemoteDataSource = WeatherRemoteDataSourceImpl
         val localDataSource: WeatherLocalDataSource
         val repository: Repository = RepositoryImpl(remoteDataSource)
 
         val remoteFactory = HomeViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, remoteFactory).get(HomeViewModel::class.java)
+        viewModel = ViewModelProvider(this, remoteFactory)[HomeViewModel::class.java]
 
         viewModel.weatherDetails.observe(viewLifecycleOwner){
                curr ->

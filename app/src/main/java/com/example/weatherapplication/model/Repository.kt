@@ -8,4 +8,5 @@ interface Repository {
                             lon: Double,
                             apiKey: String
     ) : Response<WeatherResponse>
+
 }
