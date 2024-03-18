@@ -46,10 +46,10 @@ class HomeFragment : Fragment() {
 
         viewModel.weatherDetails.observe(viewLifecycleOwner){
                curr ->
-            Log.i("Tag", "initViewModel: ${curr.city.name} ")
-            Log.i("Tag", "initViewModel: ${curr.city.country} ")
-            Log.i("Tag", "initViewModel: ${curr.message} ")
-            Log.i("Tag", "initViewModel: ${curr.list.get(0).weather.get(0).description} ")
+            Log.i("Tag", "initViewModel: ${curr.current.temp} ")
+            Log.i("Tag", "initViewModel: ${curr.current.weather.get(0).description} ")
+            Log.i("Tag", "initViewModel: ${curr.current.clouds} ")
+            //Log.i("Tag", "initViewModel: ${curr.list.get(0).weather.get(0).description} ")
 
 
         }

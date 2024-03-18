@@ -9,11 +9,10 @@ class RepositoryImpl(private val remoteDataSource: WeatherRemoteDataSource,
     )
     : Repository {
     override suspend fun getWeather(lat: Double,
-                                    lon: Double,
-                                    apiKey: String
-    ): Response<WeatherResponse> {
+                                    lon: Double
+    ): Response<Model> {
         Log.i("Tag", "Test : RepositoryImpl")
-        return remoteDataSource.getWeatherOverNetwork(lat , lon , apiKey)
+        return remoteDataSource.getWeatherOverNetwork(lat = lat , lon = lon  )
 
     }
 }

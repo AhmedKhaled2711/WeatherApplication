@@ -1,16 +1,17 @@
 package com.example.weatherapplication.remoteDataSource
 
-import com.example.weatherapplication.model.WeatherResponse
+import com.example.weatherapplication.model.Model
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 
 interface WeatherService {
-    @GET("forecast")
+    @GET("onecall")
     suspend fun getCurrentWeather(@Query("lat") lat: Double,
                                   @Query("lon") lon: Double,
-                                  @Query("appid") apiKey: String
+                                  @Query("exclude") exclude:String = "minutely",
+                                  @Query("appid") apiKey: String = "30a73a92f374a05cbcd5f6b8caeacab0"
     )
-    : Response<WeatherResponse>
+    : Response<Model>
 }
