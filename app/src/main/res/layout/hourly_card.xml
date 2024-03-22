@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="100dp"
+    app:cardCornerRadius="200dp"
+    app:cardBackgroundColor="@color/yellow"
+    android:layout_height="200dp">
+
+
+
+</androidx.cardview.widget.CardView>
