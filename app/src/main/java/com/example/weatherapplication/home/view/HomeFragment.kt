@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.FragmentHomeBinding
 import com.example.weatherapplication.db.WeatherLocalDataSource
+import com.example.weatherapplication.db.WeatherLocalDataSourceImpl
 import com.example.weatherapplication.getCurrentTime
 import com.example.weatherapplication.home.viewModel.HomeViewModel
 import com.example.weatherapplication.home.viewModel.HomeViewModelFactory
@@ -28,6 +29,7 @@ import com.example.weatherapplication.remoteDataSource.WeatherRemoteDataSourceIm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.util.Locale
 
@@ -59,17 +61,19 @@ class HomeFragment : Fragment() {
         lon = sharedPreferences.getString("longitude" , "0")!!.toDouble()
         lat = sharedPreferences.getString("latitude" , "0")!!.toDouble()
 
-        initViewModel()
-        binding.cityCountry.text = getCityAndCountryFromCoordinates(requireActivity(),lat,lon)
 
+        initViewModel()
+        //getAddressFromLocation(31.2596451 , 30.0210898)
+        Log.i("geo", "onViewCreated: ${lat}+\n${lon}")
+        getAddressFromLocation(lat , lon)
 
 
     }
 
     private fun initViewModel(){
         val remoteDataSource : WeatherRemoteDataSource = WeatherRemoteDataSourceImpl.getInstance()
-        val localDataSource: WeatherLocalDataSource
-        val repository: Repository = RepositoryImpl(remoteDataSource)
+
+        val repository: Repository = RepositoryImpl(remoteDataSource , WeatherLocalDataSourceImpl.getInstance(requireContext()))
 
         val remoteFactory = HomeViewModelFactory(repository)
         viewModel = ViewModelProvider(this, remoteFactory)[HomeViewModel::class.java]
@@ -77,6 +81,7 @@ class HomeFragment : Fragment() {
         viewModel.getWeatherDetails(lat , lon)
         viewModel.weatherDetails.observe(viewLifecycleOwner){
                curr ->
+            Log.i("geo", "initViewModel: ${curr.timezone}")
             binding.temperature.text = curr.current.temp.toString()
             binding.pressureEdit.text = curr.current.pressure.toString()
             binding.humidityEdit.text = curr.current.humidity.toString()
@@ -91,7 +96,9 @@ class HomeFragment : Fragment() {
 
             viewModelFactory = HomeViewModelFactory(
                 RepositoryImpl.getInstance(
-                    WeatherRemoteDataSourceImpl.getInstance()))
+                    WeatherRemoteDataSourceImpl.getInstance(),
+                    WeatherLocalDataSourceImpl.getInstance(requireContext()))
+            )
             viewModel = ViewModelProvider(this,viewModelFactory)[HomeViewModel::class.java]
 
             daillyLayoutManager = LinearLayoutManager(requireContext(),
@@ -146,8 +153,28 @@ class HomeFragment : Fragment() {
             }
             locationText.append(country)
         }
-        Log.i("geo", "getCityAndCountryFromCoordinates: ${locationText }+ ${latitude}+ ${longitude}")
+
         return locationText.toString()
     }
+
+    private fun getAddressFromLocation(latitude: Double, longitude: Double) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val geocoder = Geocoder(requireContext(), Locale.getDefault())
+            val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+
+            if (!addresses.isNullOrEmpty()) {
+                val addressLine = addresses[0].getAddressLine(0)
+                withContext(Dispatchers.Main) {
+                    binding.cityCountry.text = addressLine.toString()
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    // Handle case where no address is found
+                    binding.cityCountry.text = "No address found"
+                }
+            }
+        }
+    }
+
 
 }

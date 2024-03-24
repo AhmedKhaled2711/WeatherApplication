@@ -1,5 +1,6 @@
 package com.example.weatherapplication
 
+import com.example.weatherapplication.model.StoreLatitudeLongitude
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -22,5 +23,12 @@ fun getDay(dt : Long) : String{
     val data = Date(dt * 1000)
     val dateFormat = SimpleDateFormat("E, d/M", Locale.US)
     return dateFormat.format(data)
+}
+
+sealed class StateDatabase{
+    data class Success(val data: List<StoreLatitudeLongitude>):StateDatabase()
+    data class Failure(val msg:Throwable):StateDatabase()
+    object Loading:StateDatabase()
+
 }
 

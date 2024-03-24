@@ -1,5 +1,8 @@
 package com.example.weatherapplication.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 data class Model(
     val alerts: List<Alert>,
     val current: Current,
@@ -97,3 +100,9 @@ data class Temp(
     val morn: Double,
     val night: Double
 )
+@Entity(tableName = "favorite_table")
+data class StoreLatitudeLongitude(
+    @PrimaryKey
+    var longitude :Double ,
+    var latitude : Double ,
+    var name : String)
