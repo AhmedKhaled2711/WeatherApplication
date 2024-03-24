@@ -23,7 +23,7 @@ data class Alert(
 data class Current(
     val clouds: Int,
     val dew_point: Double,
-    val dt: Int,
+    val dt: Long,
     val feels_like: Double,
     val humidity: Int,
     val pressure: Int,
@@ -40,7 +40,7 @@ data class Current(
 data class Daily(
     val clouds: Int,
     val dew_point: Double,
-    val dt: Int,
+    val dt: Long,
     val feels_like: FeelsLike,
     val humidity: Int,
     val pop: Double, // Change type to Double to handle decimal values
@@ -60,10 +60,10 @@ data class Daily(
 data class Hourly(
     val clouds: Int,
     val dew_point: Double,
-    val dt: Int,
+    val dt: Long,
     val feels_like: Double,
     val humidity: Int,
-    val pop: Double, // Change type to Double to handle decimal values
+    val pop: Double,
     val pressure: Int,
     val temp: Double,
     val uvi: Double,

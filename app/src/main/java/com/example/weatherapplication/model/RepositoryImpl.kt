@@ -8,11 +8,28 @@ class RepositoryImpl(private val remoteDataSource: WeatherRemoteDataSource,
                     // private val localDataSource: WeatherRemoteDataSource
     )
     : Repository {
-    override suspend fun getWeather(lat: Double,
-                                    lon: Double
+    override suspend fun getWeather(
+        lat: Double,
+        lon: Double
     ): Response<Model> {
-        Log.i("Tag", "Test : RepositoryImpl")
-        return remoteDataSource.getWeatherOverNetwork(lat = lat , lon = lon  )
+        return remoteDataSource.getWeatherOverNetwork(lat = lat, lon = lon)
 
     }
+
+    companion object {
+        private var instance: RepositoryImpl? = null
+        fun getInstance(
+            remoteDataSource: WeatherRemoteDataSource
+        ): RepositoryImpl {
+            return instance ?: synchronized(this) {
+                val temp = RepositoryImpl(
+                    remoteDataSource
+                )
+                instance = temp
+                temp
+            }
+
+        }
+    }
+
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E9E9E9"
+    android:background="@drawable/backgroud"
     tools:context=".home.view.HomeFragment">
 
 
@@ -21,7 +21,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="50dp">
+            >
 
             <TextView
                 android:id="@+id/city_country"
@@ -33,7 +33,7 @@
                 android:drawablePadding="8dp"
                 android:gravity="center"
                 android:padding="8dp"
-                android:text="Menofia , Egypt"
+                android:text=""
                 android:textSize="20sp"
                 android:textStyle="italic|bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -48,8 +48,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/bg_home"
+                android:background="@drawable/bg_home_six"
                 android:padding="10dp"
+                android:layout_margin="8dp"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -77,14 +79,14 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/temperature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
                     android:gravity="center"
                     android:text="8"
                     android:textColor="@color/white"
-                    android:textSize="60sp"
+                    android:textSize="30sp"
                     android:textStyle="italic|bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -102,11 +104,11 @@
                     android:text="°"
                     android:textColor="@color/white"
                     android:textSize="30sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView5"
+                    app:layout_constraintBottom_toBottomOf="@+id/temperature"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/textView5"
-                    app:layout_constraintTop_toTopOf="@+id/textView5" />
+                    app:layout_constraintStart_toEndOf="@+id/temperature"
+                    app:layout_constraintTop_toTopOf="@+id/temperature" />
 
                 <TextView
                     android:id="@+id/MeasurementTemperatureDegree"
@@ -129,11 +131,11 @@
                     android:layout_marginEnd="60dp"
                     android:scaleType="centerCrop"
                     android:src="@android:drawable/btn_star_big_on"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView5"
+                    app:layout_constraintBottom_toBottomOf="@+id/temperature"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toEndOf="@+id/MeasurementTemperatureDegree"
-                    app:layout_constraintTop_toTopOf="@+id/textView5"
+                    app:layout_constraintTop_toTopOf="@+id/temperature"
                     app:layout_constraintVertical_bias="0.479" />
 
                 <TextView
@@ -149,7 +151,7 @@
                     android:textStyle="italic|bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/iv"
-                    app:layout_constraintStart_toStartOf="@+id/textView5"
+                    app:layout_constraintStart_toStartOf="@+id/temperature"
                     app:layout_constraintTop_toBottomOf="@+id/iv" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -163,7 +165,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/home_constraint"
-                app:layout_constraintVertical_bias="0.03">
+                app:layout_constraintVertical_bias="0.004">
 
             </androidx.recyclerview.widget.RecyclerView>
 
@@ -173,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_home_six"
                 android:padding="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_margin="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/DailyRv">
@@ -226,7 +228,7 @@
                                 android:text="Pressure"
                                 android:textAlignment="center"
                                 android:textColor="#B6B5B5"
-                                android:textSize="20sp" />
+                                android:textSize="17sp" />
 
                         </LinearLayout>
 
@@ -265,7 +267,7 @@
                                 android:text="Humidity"
                                 android:textAlignment="center"
                                 android:textColor="#B6B5B5"
-                                android:textSize="20sp" />
+                                android:textSize="17sp" />
 
                         </LinearLayout>
 
@@ -304,7 +306,7 @@
                                 android:text="Wind"
                                 android:textAlignment="center"
                                 android:textColor="#B6B5B5"
-                                android:textSize="20sp" />
+                                android:textSize="17sp" />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -317,11 +319,11 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:orientation="vertical"
                             android:padding="8dp"
-                            android:layout_gravity="center"
-                            android:gravity="center"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
@@ -336,32 +338,33 @@
                             <!-- TextView 1 -->
                             <TextView
                                 android:id="@+id/cloudEdit"
-                                android:textAlignment="center"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:text="TextView"
+                                android:textAlignment="center"
                                 android:textColor="#FFFFFF"
-                                android:textSize="20sp"
-                                android:text="TextView" />
+                                android:textSize="20sp" />
 
                             <!-- TextView 2 -->
                             <TextView
                                 android:id="@+id/cloud"
                                 android:layout_width="match_parent"
-                                android:textAlignment="center"
                                 android:layout_height="wrap_content"
+                                android:text="Cloud"
+                                android:textAlignment="center"
                                 android:textColor="#B6B5B5"
-                                android:textSize="20sp"
-                                android:text="Cloud" />
+                                android:textSize="17sp" />
 
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:orientation="vertical"
                             android:padding="8dp"
-                            android:layout_gravity="center"
-                            android:gravity="center"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
@@ -377,31 +380,32 @@
                             <TextView
                                 android:id="@+id/ultravioletEdit"
                                 android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="TextView"
                                 android:textAlignment="center"
                                 android:textColor="#FFFFFF"
-                                android:textSize="20sp"
-                                android:layout_height="wrap_content"
-                                android:text="TextView" />
+                                android:textSize="20sp" />
 
                             <!-- TextView 2 -->
                             <TextView
                                 android:id="@+id/ultraviolet"
                                 android:layout_width="match_parent"
-                                android:textAlignment="center"
                                 android:layout_height="wrap_content"
+                                android:text="Ultra Violet"
+                                android:textAlignment="center"
                                 android:textColor="#B6B5B5"
-                                android:textSize="20sp"
-                                android:text="Ultra Violet" />
+                                android:textSize="17sp" />
 
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:orientation="vertical"
                             android:padding="8dp"
-                            android:layout_gravity="center"
-                            android:gravity="center"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
@@ -417,21 +421,21 @@
                             <TextView
                                 android:id="@+id/visibilityEdit"
                                 android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="TextView"
                                 android:textAlignment="center"
                                 android:textColor="#FFFFFF"
-                                android:textSize="20sp"
-                                android:layout_height="wrap_content"
-                                android:text="TextView" />
+                                android:textSize="20sp" />
 
                             <!-- TextView 2 -->
                             <TextView
                                 android:id="@+id/visibility"
                                 android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Visibility"
                                 android:textAlignment="center"
                                 android:textColor="#B6B5B5"
-                                android:textSize="20sp"
-                                android:layout_height="wrap_content"
-                                android:text="Visibility" />
+                                android:textSize="17sp" />
 
                         </LinearLayout>
 
@@ -439,6 +443,18 @@
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/weeklyRV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/new_constraint"
+                app:layout_constraintVertical_bias="0.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -5,9 +5,10 @@
         android:title="Home"
         android:icon="@drawable/ic_home"/>
 
-    <item android:id="@+id/searchFragment"
-        android:title="Search"
-        android:icon="@drawable/ic_search"/>
+
+    <item android:id="@+id/alertFragment"
+        android:title="Alert"
+        android:icon="@drawable/ic_alert"/>
 
     <item android:id="@+id/favoriteFragment"
         android:title="Favorite"

@@ -16,10 +16,10 @@ class HomeViewModel(private var repository: Repository)
     private var _weatherDetails = MutableLiveData<Model>()
     var weatherDetails: LiveData<Model> = _weatherDetails
 
-    init {
-        getWeatherDetails(30.0444 , 31.2357 )
-        Log.i("Tag", "Test : HomeViewModel")
-    }
+//    init {
+//        getWeatherDetails(30.0444 , 31.2357 )
+//        Log.i("Tag", "Test : HomeViewModel")
+//    }
      fun getWeatherDetails(lat: Double,
                            lon: Double
     ){
@@ -27,7 +27,6 @@ class HomeViewModel(private var repository: Repository)
             val response = repository.getWeather(lat , lon )
             if (response.isSuccessful){
                 _weatherDetails.postValue(response.body())
-                //Log.i("Tag", "getWeatherDetails: ${response.body()?.list?.get(0)?.main?.humidity}")
             }
         }
     }
