@@ -1,4 +1,4 @@
-package com.example.weatherapplication.home.viewModel
+package com.example.weatherapplication.cityDetails.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private var repository: Repository)
+class CityViewModel(private var repository: Repository)
     : ViewModel() {
 
     private var _weatherDetails = MutableLiveData<Model>()

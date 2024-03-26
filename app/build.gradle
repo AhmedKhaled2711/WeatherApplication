@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    id("androidx.navigation.safeargs")
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -35,6 +37,8 @@ android {
     buildFeatures{
         viewBinding true
     }
+
+
 }
 
 dependencies {

@@ -1,7 +1,11 @@
 package com.example.weatherapplication.model
 
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
+
 
 data class Model(
     val alerts: List<Alert>,
@@ -100,9 +104,11 @@ data class Temp(
     val morn: Double,
     val night: Double
 )
+@Parcelize
 @Entity(tableName = "favorite_table")
 data class StoreLatitudeLongitude(
     @PrimaryKey
-    var longitude :Double ,
-    var latitude : Double ,
-    var name : String)
+    var longitude:Double,
+    var latitude: Double,
+    var name: String?
+) : Parcelable

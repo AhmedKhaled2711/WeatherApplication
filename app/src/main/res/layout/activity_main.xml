@@ -25,9 +25,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:menu="@menu/bottom_menu"
-        android:background="#11235A"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        android:background="@color/white"
+        app:itemIconTint="#11235A"
+        app:itemTextColor="#11235A"
         app:itemIconSize="30dp"
         app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"/>
 

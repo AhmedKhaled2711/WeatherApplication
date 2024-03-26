@@ -12,6 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="8dp"
         android:orientation="horizontal">
 
         <TextView
@@ -21,15 +22,16 @@
             android:text="Cario"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:textAlignment="center"
+            android:padding="5dp"
+            android:layout_marginStart="10dp"
             android:layout_gravity="center"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:textSize="20sp"/>
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_weight=".5"
             android:src="@drawable/ic_bookmark_remove"
             android:id="@+id/iv_deleteCity"/>
 

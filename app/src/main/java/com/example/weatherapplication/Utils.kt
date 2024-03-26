@@ -1,5 +1,8 @@
 package com.example.weatherapplication
 
+import android.content.Context
+import android.location.Address
+import android.location.Geocoder
 import com.example.weatherapplication.model.StoreLatitudeLongitude
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -25,10 +28,25 @@ fun getDay(dt : Long) : String{
     return dateFormat.format(data)
 }
 
-sealed class StateDatabase{
-    data class Success(val data: List<StoreLatitudeLongitude>):StateDatabase()
-    data class Failure(val msg:Throwable):StateDatabase()
-    object Loading:StateDatabase()
+sealed class StateDB{
+    data class Success(val data: List<StoreLatitudeLongitude>):StateDB()
+    data class Failure(val msg:Throwable):StateDB()
+    object Loading:StateDB()
 
+}
+
+fun getAddressEnglish(context: Context, lat: Double?, lon: Double?):String{
+    var address:MutableList<Address>?
+    val geocoder= Geocoder(context)
+    address =geocoder.getFromLocation(lat?:0.0,lon?:0.0,1)
+    if (address?.isEmpty()==true) {
+        return "Unkown location"
+    } else if (address?.get(0)?.countryName.isNullOrEmpty()) {
+        return "Unkown Country"
+    } else if (address?.get(0)?.adminArea.isNullOrEmpty()) {
+        return address?.get(0)?.countryName.toString()
+    } else{
+        return address?.get(0)?.countryName.toString()+", "+address?.get(0)?.adminArea+", "+address?.get(0)?.locality
+    }
 }
 

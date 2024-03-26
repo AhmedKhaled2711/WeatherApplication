@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.weatherapplication.databinding.ItemFavBinding
 import com.example.weatherapplication.favorite.view.OnRemoveClickListener
 import com.example.weatherapplication.model.StoreLatitudeLongitude
@@ -16,6 +15,7 @@ class AdapterFav  (private val listener: OnRemoveClickListener , private val con
     ListAdapter<StoreLatitudeLongitude, AdapterFav.MyViewHolder>(ProductDiffUtil())
 {
     private lateinit var binding: ItemFavBinding
+    private var mListener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -35,6 +35,12 @@ class AdapterFav  (private val listener: OnRemoveClickListener , private val con
         binding.ivDeleteCity.setOnClickListener{
             listener.onRemoveClick(current)
         }
+
+        holder.itemView.setOnClickListener{
+            if (mListener != null) {
+                mListener!!.onItemClick(current)// Pass the clicked item data
+            }
+        }
     }
 
     class ProductDiffUtil : DiffUtil.ItemCallback<StoreLatitudeLongitude>(){
@@ -49,4 +55,14 @@ class AdapterFav  (private val listener: OnRemoveClickListener , private val con
     }
 
     inner class MyViewHolder(var binding: ItemFavBinding) : RecyclerView.ViewHolder(binding.root)
+
+
+    interface OnItemClickListener {
+        fun onItemClick(item : StoreLatitudeLongitude)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        mListener = listener
+    }
 }
+

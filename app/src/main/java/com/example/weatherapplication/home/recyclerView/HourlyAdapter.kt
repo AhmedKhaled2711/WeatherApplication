@@ -1,4 +1,4 @@
-package com.example.weatherapplication.home.view
+package com.example.weatherapplication.home.recyclerView
 
 import android.content.Context
 import android.util.Log
@@ -15,7 +15,7 @@ import com.example.weatherapplication.model.Hourly
 class HourlyAdapter(private var context: Context) :
     ListAdapter <Hourly , HourlyAdapter.MyViewHolder> (HourlyDiffUtil()){
     lateinit var binding : HourlyCardBinding
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyAdapter.MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflater: LayoutInflater =
             parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding = HourlyCardBinding.inflate(inflater, parent, false)
@@ -23,7 +23,7 @@ class HourlyAdapter(private var context: Context) :
         return MyViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: HourlyAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val current = getItem(position)
         holder.binding.tvTime.text = getHourTime(current.dt)
         Glide.with(context).load("https://openweathermap.org/img/wn/"+

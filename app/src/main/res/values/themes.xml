@@ -10,6 +10,6 @@
     <style name="Theme.WeatherApplication" parent="Base.Theme.WeatherApplication" />
     
     <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:color">@color/yellow</item>
+        <item name="android:color">#F9E8C9</item>
     </style>
 </resources>

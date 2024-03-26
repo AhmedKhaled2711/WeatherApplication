@@ -18,17 +18,10 @@ import com.example.weatherapplication.databinding.ActivityMapsBinding
 import com.example.weatherapplication.db.WeatherLocalDataSourceImpl
 import com.example.weatherapplication.favorite.viewModel.FavoriteViewModel
 import com.example.weatherapplication.favorite.viewModel.FavoriteViewModelFactory
-import com.example.weatherapplication.home.view.DailyAdapter
-import com.example.weatherapplication.home.view.HourlyAdapter
-import com.example.weatherapplication.home.viewModel.HomeViewModel
-import com.example.weatherapplication.home.viewModel.HomeViewModelFactory
-import com.example.weatherapplication.model.Repository
 import com.example.weatherapplication.model.RepositoryImpl
 import com.example.weatherapplication.model.StoreLatitudeLongitude
-import com.example.weatherapplication.remoteDataSource.WeatherRemoteDataSource
 import com.example.weatherapplication.remoteDataSource.WeatherRemoteDataSourceImpl
 import com.google.android.gms.maps.model.Marker
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.IOException
 import java.util.Locale
 

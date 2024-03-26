@@ -1,8 +1,8 @@
 package com.example.weatherapplication.favorite.view
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,23 +10,27 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.MapsActivity
-import com.example.weatherapplication.StateDatabase
+import com.example.weatherapplication.StateDB
 import com.example.weatherapplication.databinding.FragmentFavoriteBinding
 import com.example.weatherapplication.db.WeatherLocalDataSourceImpl
 import com.example.weatherapplication.favorite.recyclerView.AdapterFav
 import com.example.weatherapplication.favorite.viewModel.FavoriteViewModel
 import com.example.weatherapplication.favorite.viewModel.FavoriteViewModelFactory
+import com.example.weatherapplication.home.viewModel.HomeViewModelFactory
+import com.example.weatherapplication.model.Repository
 import com.example.weatherapplication.model.RepositoryImpl
 import com.example.weatherapplication.model.StoreLatitudeLongitude
+import com.example.weatherapplication.remoteDataSource.WeatherRemoteDataSource
 import com.example.weatherapplication.remoteDataSource.WeatherRemoteDataSourceImpl
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
-class FavoriteFragment : Fragment() , OnRemoveClickListener{
+class FavoriteFragment : Fragment() , OnRemoveClickListener , AdapterFav.OnItemClickListener{
 
     private lateinit var binding: FragmentFavoriteBinding
     private lateinit var adapter: AdapterFav
@@ -47,11 +51,21 @@ class FavoriteFragment : Fragment() , OnRemoveClickListener{
         }
         setUpRecyclerView()
         initViewModel()
+        adapter.setOnItemClickListener(this)
     }
 
     override fun onRemoveClick(location: StoreLatitudeLongitude) {
-        viewModel.deleteLocation(location)
-        Toast.makeText(requireContext(), "Product removed from Favourites", Toast.LENGTH_LONG).show()
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Confirm Deletion")
+        builder.setMessage("Are you sure you want to remove this city?")
+        builder.setPositiveButton("Yes") { _, _ ->
+            viewModel.deleteLocation(location)
+            Toast.makeText(requireContext(), "City removed", Toast.LENGTH_LONG).show()
+        }
+        builder.setNegativeButton("No") { _, _ ->
+            Toast.makeText(requireContext(), "Deletion cancelled", Toast.LENGTH_LONG).show()
+        }
+        builder.show()
     }
 
     private fun setUpRecyclerView(){
@@ -64,33 +78,25 @@ class FavoriteFragment : Fragment() , OnRemoveClickListener{
         binding.favoriteRV.adapter = adapter
     }
 
-      fun initViewModel(){
-//        val remoteDataSource : WeatherRemoteDataSource = WeatherRemoteDataSourceImpl.getInstance()
-//
-//        val repository: Repository = RepositoryImpl(remoteDataSource , WeatherLocalDataSourceImpl.getInstance(this))
-//
-//        val remoteFactory = FavoriteViewModelFactory(repository)
-//        viewModel = ViewModelProvider(this, remoteFactory)[FavoriteViewModel::class.java]
+    fun initViewModel(){
 
-        val factory = FavoriteViewModelFactory(
-            RepositoryImpl.getInstance(
-                WeatherRemoteDataSourceImpl.getInstance(),
-                WeatherLocalDataSourceImpl.getInstance(requireContext())
+        val remoteDataSource : WeatherRemoteDataSource = WeatherRemoteDataSourceImpl.getInstance()
 
-            )
-        )
+        val repository: Repository = RepositoryImpl(remoteDataSource , WeatherLocalDataSourceImpl.getInstance(requireContext()))
 
-        viewModel = ViewModelProvider(this, factory).get(FavoriteViewModel::class.java)
+        val remoteFactory = FavoriteViewModelFactory(repository)
+
+        viewModel = ViewModelProvider(this, remoteFactory).get(FavoriteViewModel::class.java)
 
         lifecycleScope.launch {
-            viewModel._favoriteLocation.collectLatest {result ->
+            viewModel.favoriteLocation.collectLatest {result ->
                 when(result){
-                    is StateDatabase.Loading ->{
+                    is StateDB.Loading ->{
                         //binding.progressBar.visibility = View.VISIBLE
                         //binding.rv.visibility = View.GONE
                     }
 
-                    is StateDatabase.Success ->{
+                    is StateDB.Success ->{
                        // binding.progressBar.visibility = View.GONE
                         //binding.rv.visibility = View.VISIBLE
                         adapter.submitList(result.data)
@@ -105,6 +111,12 @@ class FavoriteFragment : Fragment() , OnRemoveClickListener{
             }
         }
 
+    }
+
+    override fun onItemClick(item: StoreLatitudeLongitude) {
+        Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
+        val action = FavoriteFragmentDirections.actionFavoriteFragmentToDetailsFragment(item)
+        findNavController().navigate(action)
     }
 
 }

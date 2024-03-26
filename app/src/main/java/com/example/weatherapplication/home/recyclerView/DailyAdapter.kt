@@ -1,4 +1,4 @@
-package com.example.weatherapplication.home.view
+package com.example.weatherapplication.home.recyclerView
 
 import android.content.Context
 import android.util.Log
@@ -9,16 +9,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.weatherapplication.databinding.DailyCardBinding
-import com.example.weatherapplication.databinding.HourlyCardBinding
 import com.example.weatherapplication.getDay
-import com.example.weatherapplication.getHourTime
 import com.example.weatherapplication.model.Daily
-import com.example.weatherapplication.model.Hourly
 
 class DailyAdapter(private var context: Context) :
     ListAdapter <Daily , DailyAdapter.MyViewHolder> (DailyDiffUtil()){
     private lateinit var binding : DailyCardBinding
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailyAdapter.MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflater: LayoutInflater =
             parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding = DailyCardBinding.inflate(inflater, parent, false)
@@ -26,7 +23,7 @@ class DailyAdapter(private var context: Context) :
         return MyViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: DailyAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val current = getItem(position)
         holder.binding.tvDay.text = getDay(current.dt)
         Glide.with(context).load("https://openweathermap.org/img/wn/"+
