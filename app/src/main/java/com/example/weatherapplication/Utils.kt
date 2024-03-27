@@ -3,11 +3,17 @@ package com.example.weatherapplication
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import com.example.weatherapplication.model.StoreLatitudeLongitude
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+const val notificationID = 121
+const val channelID = "channel1"
+const val titleExtra = "titleExtra"
+const val messageExtra = "messageExtra"
 
 fun getCurrentTime(dt : Long) : String{
     val data = Date(dt * 1000)
@@ -47,6 +53,19 @@ fun getAddressEnglish(context: Context, lat: Double?, lon: Double?):String{
         return address?.get(0)?.countryName.toString()
     } else{
         return address?.get(0)?.countryName.toString()+", "+address?.get(0)?.adminArea+", "+address?.get(0)?.locality
+    }
+}
+
+fun isNetworkConnected(context: Context): Boolean {
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    val networkCapabilities = connectivityManager.activeNetwork ?: return false
+    val activeNetwork = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+
+    return when {
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+        else -> false
     }
 }
 

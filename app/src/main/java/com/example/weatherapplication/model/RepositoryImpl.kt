@@ -30,6 +30,14 @@ class RepositoryImpl(private val remoteDataSource: WeatherRemoteDataSource,
          localDataSource.deleteLocationInRoom(location)
     }
 
+    override suspend fun getCurrentWeather(): Model {
+        return localDataSource.getCurrentWeather()
+    }
+
+    override suspend fun insertCurrentWeather(model: Model) {
+        return localDataSource.insertCurrentWeather(model)
+    }
+
     companion object {
         private var instance: RepositoryImpl? = null
         fun getInstance(

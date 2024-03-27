@@ -9,8 +9,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -23,6 +25,7 @@ import com.example.weatherapplication.home.recyclerView.DailyAdapter
 import com.example.weatherapplication.home.recyclerView.HourlyAdapter
 import com.example.weatherapplication.home.viewModel.HomeViewModel
 import com.example.weatherapplication.home.viewModel.HomeViewModelFactory
+import com.example.weatherapplication.isNetworkConnected
 import com.example.weatherapplication.model.Repository
 import com.example.weatherapplication.model.RepositoryImpl
 import com.example.weatherapplication.remoteDataSource.WeatherRemoteDataSource
@@ -62,9 +65,13 @@ class HomeFragment : Fragment() {
         lon = sharedPreferences.getString("longitude" , "0")!!.toDouble()
         lat = sharedPreferences.getString("latitude" , "0")!!.toDouble()
 
+
         setUpDailyRV()
         setUpHourlyRV()
         initViewModel()
+
+
+
 
 
     }
@@ -77,27 +84,55 @@ class HomeFragment : Fragment() {
         val remoteFactory = HomeViewModelFactory(repository)
         viewModel = ViewModelProvider(this, remoteFactory)[HomeViewModel::class.java]
 
-        viewModel.getWeatherDetails(lat , lon)
-        viewModel.weatherDetails.observe(viewLifecycleOwner){
-               curr ->
-            binding.temperature.text = curr.current.temp.toString()
-            binding.pressureEdit.text = curr.current.pressure.toString()
-            binding.humidityEdit.text = curr.current.humidity.toString()
-            binding.windEdit.text = curr.current.wind_speed.toString()
-            binding.cloudEdit.text = curr.current.clouds.toString()
-            binding.ultravioletEdit.text = curr.current.uvi.toString()
-            binding.visibilityEdit.text = curr.current.visibility.toString()
-            binding.cityCountry.text = getAddressEnglish(requireContext(), lat,lon)
-            Glide.with(requireContext()).load("https://openweathermap.org/img/wn/"
-                    + curr.current.weather[0].icon+"@4x.png").into(binding.iv)
-            binding.descOfWeather.text  = curr.current.weather[0].description
-            binding.today.text = getCurrentTime(curr.current.dt)
 
+        lifecycleScope.launch {
+            if (isNetworkConnected(requireContext())) {
+                Toast.makeText(requireContext() , "Data from Network", Toast.LENGTH_SHORT).show()
+                viewModel.getWeatherDetails(lat , lon)
+                viewModel.weatherDetails.observe(viewLifecycleOwner){
+                        curr ->
+                    binding.temperature.text = curr.current.temp.toString()
+                    binding.pressureEdit.text = curr.current.pressure.toString()
+                    binding.humidityEdit.text = curr.current.humidity.toString()
+                    binding.windEdit.text = curr.current.wind_speed.toString()
+                    binding.cloudEdit.text = curr.current.clouds.toString()
+                    binding.ultravioletEdit.text = curr.current.uvi.toString()
+                    binding.visibilityEdit.text = curr.current.visibility.toString()
+                    binding.cityCountry.text = getAddressEnglish(requireContext(), lat,lon)
+                    Glide.with(requireContext()).load("https://openweathermap.org/img/wn/"
+                            + curr.current.weather[0].icon+"@4x.png").into(binding.iv)
+                    binding.descOfWeather.text  = curr.current.weather[0].description
+                    binding.today.text = getCurrentTime(curr.current.dt)
 
-            dailyAdapter.submitList(curr.daily.subList(0,7))
-            hourlyAdapter.submitList(curr.hourly.subList(0,24))
+                    viewModel.insertCurrentWeather(curr)
+                    dailyAdapter.submitList(curr.daily.subList(0,7))
+                    hourlyAdapter.submitList(curr.hourly.subList(0,24))
 
+                }
+            } else {
+                Toast.makeText(requireContext() , "Data from DB", Toast.LENGTH_SHORT).show()
+                viewModel.getCurrentWeather()
+                viewModel.weatherDetails.observe(viewLifecycleOwner){
+                        curr ->
+                    binding.temperature.text = curr.current.temp.toString()
+                    binding.pressureEdit.text = curr.current.pressure.toString()
+                    binding.humidityEdit.text = curr.current.humidity.toString()
+                    binding.windEdit.text = curr.current.wind_speed.toString()
+                    binding.cloudEdit.text = curr.current.clouds.toString()
+                    binding.ultravioletEdit.text = curr.current.uvi.toString()
+                    binding.visibilityEdit.text = curr.current.visibility.toString()
+                    binding.cityCountry.text = getAddressEnglish(requireContext(), lat,lon)
+                    Glide.with(requireContext()).load("https://openweathermap.org/img/wn/"
+                            + curr.current.weather[0].icon+"@4x.png").into(binding.iv)
+                    binding.descOfWeather.text  = curr.current.weather[0].description
+                    binding.today.text = getCurrentTime(curr.current.dt)
+                    dailyAdapter.submitList(curr.daily.subList(0,7))
+                    hourlyAdapter.submitList(curr.hourly.subList(0,24))
+
+                }
+            }
         }
+
     }
 
     private fun setUpDailyRV(){

@@ -2,12 +2,13 @@ package com.example.weatherapplication.db
 
 import android.content.Context
 import com.example.dayone.Five.WeatherDataBase
+import com.example.weatherapplication.model.Model
 import com.example.weatherapplication.model.StoreLatitudeLongitude
 import kotlinx.coroutines.flow.Flow
 
 class WeatherLocalDataSourceImpl(context: Context) : WeatherLocalDataSource{
-    private var weatherDao : WeatherDao?
 
+    private var weatherDao : WeatherDao?
     init {
         val dataBase = WeatherDataBase.getInstance(context)
         weatherDao = dataBase.getWeatherDao()
@@ -32,5 +33,13 @@ class WeatherLocalDataSourceImpl(context: Context) : WeatherLocalDataSource{
 
     override suspend fun deleteLocationInRoom(location: StoreLatitudeLongitude) {
         return weatherDao!!.deleteLocation(location)
+    }
+
+    override suspend fun getCurrentWeather(): Model {
+        return weatherDao!!.getCurrentWeather()
+    }
+
+    override suspend fun insertCurrentWeather(model: Model) {
+        return weatherDao!!.insertCurrentWeather(model)
     }
 }

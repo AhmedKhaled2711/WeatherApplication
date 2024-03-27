@@ -3,6 +3,7 @@ package com.example.weatherapplication.favorite.view
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,14 +14,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherapplication.MapsActivity
+import com.example.weatherapplication.favorite.MapsActivity
 import com.example.weatherapplication.StateDB
 import com.example.weatherapplication.databinding.FragmentFavoriteBinding
 import com.example.weatherapplication.db.WeatherLocalDataSourceImpl
 import com.example.weatherapplication.favorite.recyclerView.AdapterFav
 import com.example.weatherapplication.favorite.viewModel.FavoriteViewModel
 import com.example.weatherapplication.favorite.viewModel.FavoriteViewModelFactory
-import com.example.weatherapplication.home.viewModel.HomeViewModelFactory
 import com.example.weatherapplication.model.Repository
 import com.example.weatherapplication.model.RepositoryImpl
 import com.example.weatherapplication.model.StoreLatitudeLongitude
@@ -92,19 +92,19 @@ class FavoriteFragment : Fragment() , OnRemoveClickListener , AdapterFav.OnItemC
             viewModel.favoriteLocation.collectLatest {result ->
                 when(result){
                     is StateDB.Loading ->{
-                        //binding.progressBar.visibility = View.VISIBLE
-                        //binding.rv.visibility = View.GONE
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.favoriteRV.visibility = View.GONE
                     }
 
                     is StateDB.Success ->{
-                       // binding.progressBar.visibility = View.GONE
-                        //binding.rv.visibility = View.VISIBLE
+                        binding.progressBar.visibility = View.GONE
+                        binding.favoriteRV.visibility = View.VISIBLE
                         adapter.submitList(result.data)
                     }
 
                     else ->{
-                        //binding.progressBar.visibility = View.GONE
-                        //Log.i("Error", "Error: ")
+                        binding.progressBar.visibility = View.GONE
+                        Log.i("Error", "Error: ")
                     }
                 }
 

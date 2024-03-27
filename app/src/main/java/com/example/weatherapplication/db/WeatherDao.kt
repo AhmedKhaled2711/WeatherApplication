@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.weatherapplication.model.Model
 import com.example.weatherapplication.model.StoreLatitudeLongitude
 import kotlinx.coroutines.flow.Flow
 
@@ -19,4 +20,9 @@ interface WeatherDao {
 
     @Delete
     fun deleteLocation(location: StoreLatitudeLongitude)
+
+    @Query("SELECT * FROM current_table")
+    suspend fun getCurrentWeather(): Model
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertCurrentWeather(model: Model)
 }

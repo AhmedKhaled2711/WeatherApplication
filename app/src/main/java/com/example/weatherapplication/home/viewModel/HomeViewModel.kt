@@ -31,6 +31,21 @@ class HomeViewModel(private var repository: Repository)
         }
     }
 
+     fun getCurrentWeather(){
+         viewModelScope.launch(Dispatchers.IO) {
+             val response = repository.getCurrentWeather()
+             _weatherDetails.postValue(response)
+
+         }
+     }
+
+     fun insertCurrentWeather(model: Model){
+         viewModelScope.launch(Dispatchers.IO){
+             repository.insertCurrentWeather(model)
+
+         }
+     }
+
     override fun onCleared() {
         super.onCleared()
     }

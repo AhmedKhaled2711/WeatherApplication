@@ -2,22 +2,33 @@ package com.example.weatherapplication.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import kotlinx.android.parcel.Parcelize
+import org.jetbrains.annotations.Nullable
 
-
+@Entity(tableName = "current_table")
 data class Model(
-    val alerts: List<Alert>,
+    @PrimaryKey(autoGenerate = false)
+    var id : Int = 0,
+    @Nullable
+    @TypeConverters(ModelConverter::class)
+    val alerts: List<Alert>?,
+    @Embedded(prefix = "current_")
     val current: Current,
+    @TypeConverters(ModelConverter::class)
     val daily: List<Daily>,
+    @TypeConverters(ModelConverter::class)
     val hourly: List<Hourly>,
     val lat: Double,
     val lon: Double,
     val timezone: String,
     val timezone_offset: Int
 )
-
+@TypeConverters(ModelConverter::class)
 data class Alert(
     val description: String,
     val end: Int,
@@ -27,6 +38,7 @@ data class Alert(
     val tags: List<String>
 )
 
+@TypeConverters(ModelConverter::class)
 data class Current(
     val clouds: Int,
     val dew_point: Double,
@@ -43,7 +55,7 @@ data class Current(
     val wind_deg: Int,
     val wind_speed: Double
 )
-
+@TypeConverters(ModelConverter::class)
 data class Daily(
     val clouds: Int,
     val dew_point: Double,
@@ -63,7 +75,7 @@ data class Daily(
     val wind_speed: Double
 )
 
-
+@TypeConverters(ModelConverter::class)
 data class Hourly(
     val clouds: Int,
     val dew_point: Double,
@@ -81,7 +93,7 @@ data class Hourly(
     val wind_speed: Double
 )
 
-
+@TypeConverters(ModelConverter::class)
 data class Weather(
     val description: String,
     val icon: String,

@@ -4,10 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.weatherapplication.db.WeatherDao
+import com.example.weatherapplication.model.Model
+import com.example.weatherapplication.model.ModelConverter
 import com.example.weatherapplication.model.StoreLatitudeLongitude
 
-@Database(entities = arrayOf(StoreLatitudeLongitude::class) , version =  1)
+@Database(entities = arrayOf(StoreLatitudeLongitude::class , Model::class ) , version =  3 , exportSchema = false)
+@TypeConverters(ModelConverter::class)
 abstract class WeatherDataBase : RoomDatabase() {
 
     abstract fun  getWeatherDao() : WeatherDao
@@ -20,7 +24,8 @@ abstract class WeatherDataBase : RoomDatabase() {
                 val  instance = Room.databaseBuilder(
                     context.applicationContext , WeatherDataBase::class.java , "weather_dataBase"
 
-                ).build()
+                ).fallbackToDestructiveMigration()
+                .build()
                 INSTANCE = instance
                 instance
 

@@ -13,8 +13,10 @@ import com.example.weatherapplication.getDay
 import com.example.weatherapplication.model.Daily
 
 class DailyAdapter(private var context: Context) :
-    ListAdapter <Daily , DailyAdapter.MyViewHolder> (DailyDiffUtil()){
+    ListAdapter <Daily, DailyAdapter.MyViewHolder> (DailyDiffUtil()){
+
     private lateinit var binding : DailyCardBinding
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflater: LayoutInflater =
             parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

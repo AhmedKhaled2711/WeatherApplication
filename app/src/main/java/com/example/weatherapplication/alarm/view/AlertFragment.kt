@@ -1,10 +1,11 @@
-package com.example.weatherapplication
+package com.example.weatherapplication.alarm.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.weatherapplication.R
 
 
 class AlertFragment : Fragment() {

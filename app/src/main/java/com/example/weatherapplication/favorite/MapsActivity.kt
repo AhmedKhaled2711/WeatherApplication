@@ -1,4 +1,4 @@
-package com.example.weatherapplication
+package com.example.weatherapplication.favorite
 
 import android.location.Address
 import android.location.Geocoder
@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import com.example.weatherapplication.R
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap

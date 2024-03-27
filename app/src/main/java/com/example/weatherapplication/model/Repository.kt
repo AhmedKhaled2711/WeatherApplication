@@ -13,4 +13,8 @@ interface Repository {
     suspend fun insertToFavorite(location: StoreLatitudeLongitude)
     suspend fun removeFromFavorite(favoritePlaces: StoreLatitudeLongitude)
 
+    suspend fun getCurrentWeather(): Model
+
+    suspend fun insertCurrentWeather(model: Model)
+
 }
