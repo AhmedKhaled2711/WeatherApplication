@@ -24,7 +24,7 @@
             android:id="@+id/tv_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10 AM"
+
             android:layout_marginStart="5dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
@@ -59,8 +59,7 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="MinMax"/>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

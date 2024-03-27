@@ -12,9 +12,11 @@ class RepositoryImpl(private val remoteDataSource: WeatherRemoteDataSource,
     : Repository {
     override suspend fun getWeather(
         lat: Double,
-        lon: Double
+        lon: Double,
+        units:String,
+        language:String
     ): Response<Model> {
-        return remoteDataSource.getWeatherOverNetwork(lat = lat, lon = lon)
+        return remoteDataSource.getWeatherOverNetwork(lat = lat, lon = lon , language=language , units = units)
 
     }
 

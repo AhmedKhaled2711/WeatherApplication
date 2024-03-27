@@ -21,10 +21,12 @@ class HomeViewModel(private var repository: Repository)
 
 
      fun getWeatherDetails(lat: Double,
-                           lon: Double
+                           lon: Double,
+                           units:String,
+                           language:String
     ){
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getWeather(lat , lon )
+            val response = repository.getWeather(lat , lon , units ,language )
             if (response.isSuccessful){
                 _weatherDetails.postValue(response.body())
             }

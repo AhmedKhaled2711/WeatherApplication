@@ -34,7 +34,7 @@ class DetailsFragment : Fragment() {
 
     private var lon = 0.0
     private var lat = 0.0
-    private lateinit var sharedPreferences: SharedPreferences
+    private var selectedUnit: String? = null
     private lateinit var viewModel: CityViewModel
     private lateinit var viewModelFactory: CityViewModelFactory
     private lateinit var hourlyAdapter : HourlyAdapter

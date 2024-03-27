@@ -69,3 +69,11 @@ fun isNetworkConnected(context: Context): Boolean {
     }
 }
 
+fun getMeasurementSystem(input: String): String {
+    return when (input) {
+        "Fahrenheit" -> "imperial"
+        "Celsius" -> "metric"
+        else -> ""
+    }
+}
+

@@ -6,7 +6,9 @@ import retrofit2.Response
 interface Repository {
 
     suspend fun getWeather( lat: Double,
-                            lon: Double
+                            lon: Double,
+                            units:String,
+                            language:String
     ) : Response<Model>
 
     suspend fun getFavoriteLocations(): Flow<List<StoreLatitudeLongitude>>

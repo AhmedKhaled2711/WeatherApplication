@@ -32,9 +32,11 @@ class WeatherRemoteDataSourceImpl : WeatherRemoteDataSource {
     override suspend fun getWeatherOverNetwork(
         lat: Double,
         lon: Double,
+        units:String,
+        language:String
 
     ): Response<Model> {
 
-        return weatherService.getCurrentWeather(lat=lat , lon=lon )
+        return weatherService.getCurrentWeather(lat=lat , lon=lon , language=language , units =  units )
     }
 }

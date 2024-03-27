@@ -24,7 +24,7 @@ class CityViewModel(private var repository: Repository)
                            lon: Double
     ){
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getWeather(lat , lon )
+            val response = repository.getWeather(lat , lon , "metric" ,"ar" )
             if (response.isSuccessful){
                 _weatherDetails.postValue(response.body())
             }

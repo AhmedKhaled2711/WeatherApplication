@@ -6,7 +6,9 @@ import retrofit2.Response
 interface WeatherRemoteDataSource {
     suspend fun getWeatherOverNetwork(
         lat: Double,
-        lon: Double
+        lon: Double,
+        units:String,
+        language:String
     ) : Response<Model>
 
 }
