@@ -5,6 +5,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import com.example.weatherapplication.model.Model
 import com.example.weatherapplication.model.StoreLatitudeLongitude
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -38,6 +39,12 @@ sealed class StateDB{
     data class Success(val data: List<StoreLatitudeLongitude>):StateDB()
     data class Failure(val msg:Throwable):StateDB()
     object Loading:StateDB()
+
+}
+sealed class StateRemote{
+    data class Success(val data: Model):StateRemote()
+    data class Failure(val msg:Throwable):StateRemote()
+    object Loading:StateRemote()
 
 }
 

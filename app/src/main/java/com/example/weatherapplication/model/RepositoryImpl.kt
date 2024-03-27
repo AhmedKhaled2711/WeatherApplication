@@ -15,7 +15,7 @@ class RepositoryImpl(private val remoteDataSource: WeatherRemoteDataSource,
         lon: Double,
         units:String,
         language:String
-    ): Response<Model> {
+    ): Model {
         return remoteDataSource.getWeatherOverNetwork(lat = lat, lon = lon , language=language , units = units)
 
     }
@@ -32,7 +32,7 @@ class RepositoryImpl(private val remoteDataSource: WeatherRemoteDataSource,
          localDataSource.deleteLocationInRoom(location)
     }
 
-    override suspend fun getCurrentWeather(): Model {
+    override suspend fun getCurrentWeather(): Flow<Model> {
         return localDataSource.getCurrentWeather()
     }
 

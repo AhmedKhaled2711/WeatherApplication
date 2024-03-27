@@ -2,6 +2,7 @@ package com.example.weatherapplication.remoteDataSource
 
 import android.util.Log
 import com.example.weatherapplication.model.Model
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -29,13 +30,13 @@ class WeatherRemoteDataSourceImpl : WeatherRemoteDataSource {
         }
     }
 
-    override suspend fun getWeatherOverNetwork(
+    override suspend  fun getWeatherOverNetwork(
         lat: Double,
         lon: Double,
         units:String,
         language:String
 
-    ): Response<Model> {
+    ): Model{
 
         return weatherService.getCurrentWeather(lat=lat , lon=lon , language=language , units =  units )
     }

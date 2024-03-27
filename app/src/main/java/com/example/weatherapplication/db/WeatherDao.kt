@@ -22,7 +22,7 @@ interface WeatherDao {
     fun deleteLocation(location: StoreLatitudeLongitude)
 
     @Query("SELECT * FROM current_table")
-    suspend fun getCurrentWeather(): Model
+    fun getCurrentWeather(): Flow<Model>
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertCurrentWeather(model: Model)
+    fun insertCurrentWeather(model: Model)
 }

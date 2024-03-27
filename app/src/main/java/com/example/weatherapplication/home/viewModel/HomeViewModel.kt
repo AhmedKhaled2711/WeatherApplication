@@ -5,19 +5,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapplication.StateDB
+import com.example.weatherapplication.StateRemote
 import com.example.weatherapplication.model.Model
 import com.example.weatherapplication.model.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private var repository: Repository)
     : ViewModel() {
 
-    private var _weatherDetails = MutableLiveData<Model>()
-    var weatherDetails: LiveData<Model> = _weatherDetails
+    private var _weatherDetails: MutableStateFlow<StateRemote> = MutableStateFlow(StateRemote.Loading)
+    val weatherDetails = _weatherDetails.asStateFlow()
 
-    var favoriteLocation : MutableStateFlow<StateDB> = MutableStateFlow(StateDB.Loading)
+    private var _weatherDetailsDB: MutableStateFlow<StateRemote> = MutableStateFlow(StateRemote.Loading)
+    val weatherDetailsDB = _weatherDetailsDB.asStateFlow()
 
 
      fun getWeatherDetails(lat: Double,
@@ -26,18 +29,16 @@ class HomeViewModel(private var repository: Repository)
                            language:String
     ){
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getWeather(lat , lon , units ,language )
-            if (response.isSuccessful){
-                _weatherDetails.postValue(response.body())
-            }
+            val weather = repository.getWeather(lat, lon, units, language)
+            _weatherDetails.value = StateRemote.Success(weather)
         }
     }
 
      fun getCurrentWeather(){
          viewModelScope.launch(Dispatchers.IO) {
-             val response = repository.getCurrentWeather()
-             _weatherDetails.postValue(response)
-
+             repository.getCurrentWeather().collect { weather ->
+                 _weatherDetailsDB.value = StateRemote.Success(weather)
+             }
          }
      }
 

@@ -35,7 +35,7 @@ class WeatherLocalDataSourceImpl(context: Context) : WeatherLocalDataSource{
         return weatherDao!!.deleteLocation(location)
     }
 
-    override suspend fun getCurrentWeather(): Model {
+    override suspend fun getCurrentWeather(): Flow<Model> {
         return weatherDao!!.getCurrentWeather()
     }
 

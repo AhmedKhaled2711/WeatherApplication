@@ -16,7 +16,7 @@ interface WeatherLocalDataSource {
 
     suspend fun deleteLocationInRoom(location: StoreLatitudeLongitude)
 
-    suspend fun getCurrentWeather(): Model
+    suspend fun getCurrentWeather(): Flow<Model>
 
     suspend fun insertCurrentWeather(model: Model)
 
