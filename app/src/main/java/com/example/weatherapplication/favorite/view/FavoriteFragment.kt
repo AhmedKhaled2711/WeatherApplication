@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.favorite.MapsActivity
 import com.example.weatherapplication.StateDB
 import com.example.weatherapplication.databinding.FragmentFavoriteBinding
+import com.example.weatherapplication.db.WeatherLocalDataSource
 import com.example.weatherapplication.db.WeatherLocalDataSourceImpl
 import com.example.weatherapplication.favorite.recyclerView.AdapterFav
 import com.example.weatherapplication.favorite.viewModel.FavoriteViewModel
@@ -79,10 +80,9 @@ class FavoriteFragment : Fragment() , OnRemoveClickListener , AdapterFav.OnItemC
     }
 
     fun initViewModel(){
-
         val remoteDataSource : WeatherRemoteDataSource = WeatherRemoteDataSourceImpl.getInstance()
-
-        val repository: Repository = RepositoryImpl(remoteDataSource , WeatherLocalDataSourceImpl.getInstance(requireContext()))
+        val localDataSource : WeatherLocalDataSource =  WeatherLocalDataSourceImpl.getInstance(requireContext())
+        val repository: Repository = RepositoryImpl(remoteDataSource ,localDataSource)
 
         val remoteFactory = FavoriteViewModelFactory(repository)
 

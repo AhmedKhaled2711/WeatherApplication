@@ -22,6 +22,7 @@ import com.example.weatherapplication.cityDetails.viewModel.CityViewModel
 import com.example.weatherapplication.cityDetails.viewModel.CityViewModelFactory
 import com.example.weatherapplication.databinding.FragmentDetailsBinding
 import com.example.weatherapplication.databinding.FragmentHomeBinding
+import com.example.weatherapplication.db.WeatherLocalDataSource
 import com.example.weatherapplication.db.WeatherLocalDataSourceImpl
 import com.example.weatherapplication.getAddressEnglish
 import com.example.weatherapplication.getCurrentTime
@@ -119,8 +120,8 @@ class DetailsFragment : Fragment() {
 
     private fun initViewModel(){
         val remoteDataSource : WeatherRemoteDataSource = WeatherRemoteDataSourceImpl.getInstance()
-
-        val repository: Repository = RepositoryImpl(remoteDataSource , WeatherLocalDataSourceImpl.getInstance(requireContext()))
+        val localDataSource : WeatherLocalDataSource =  WeatherLocalDataSourceImpl.getInstance(requireContext())
+        val repository: Repository = RepositoryImpl(remoteDataSource ,localDataSource)
 
         val remoteFactory = CityViewModelFactory(repository)
         viewModel = ViewModelProvider(this, remoteFactory)[CityViewModel::class.java]

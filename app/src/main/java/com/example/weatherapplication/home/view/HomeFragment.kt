@@ -21,6 +21,7 @@ import com.example.weatherapplication.R
 import com.example.weatherapplication.StateRemote
 import com.example.weatherapplication.cityDetails.view.DetailsFragmentArgs
 import com.example.weatherapplication.databinding.FragmentHomeBinding
+import com.example.weatherapplication.db.WeatherLocalDataSource
 import com.example.weatherapplication.db.WeatherLocalDataSourceImpl
 import com.example.weatherapplication.favorite.recyclerView.AdapterFav
 import com.example.weatherapplication.getAddressEnglish
@@ -55,9 +56,8 @@ class HomeFragment : Fragment() {
     private lateinit var selectedWindSpeed: String
     private lateinit var selectedNotification: String
     private lateinit var sharedPreferencesLocation: SharedPreferences
-    private lateinit var spSelectedUnit: SharedPreferences
+    private lateinit var spSettings: SharedPreferences
     private lateinit var viewModel: HomeViewModel
-    private lateinit var viewModelFactory: HomeViewModelFactory
     private lateinit var hourlyAdapter : HourlyAdapter
     private lateinit var dailyAdapter : DailyAdapter
     private lateinit var hourlyLayoutManager: LinearLayoutManager
@@ -78,16 +78,16 @@ class HomeFragment : Fragment() {
         lon = sharedPreferencesLocation.getString("longitude" , "0")!!.toDouble()
         lat = sharedPreferencesLocation.getString("latitude" , "0")!!.toDouble()
 
-        spSelectedUnit= requireActivity().getSharedPreferences("settings" , Context.MODE_PRIVATE)
-        selectedUnit = spSelectedUnit.getString("selectedUnit" , "" ).toString()
+        spSettings= requireActivity().getSharedPreferences("settings" , Context.MODE_PRIVATE)
+        selectedUnit = spSettings.getString("selectedUnit" , "" ).toString()
         Log.i("sp", "$selectedUnit ")
-        selectedLanguage = spSelectedUnit.getString("selectedLanguage" , "" ).toString()
+        selectedLanguage = spSettings.getString("selectedLanguage" , "" ).toString()
         Log.i("sp", "$selectedLanguage ")
-        selectedLocation = spSelectedUnit.getString("selectedLocation" , "" ).toString()
+        selectedLocation = spSettings.getString("selectedLocation" , "" ).toString()
         Log.i("sp", "$selectedLocation ")
-        selectedWindSpeed = spSelectedUnit.getString("selectedWindSpeed" , "" ).toString()
+        selectedWindSpeed = spSettings.getString("selectedWindSpeed" , "" ).toString()
         Log.i("sp", "$selectedWindSpeed ")
-        selectedNotification = spSelectedUnit.getString("selectedNotification" , "" ).toString()
+        selectedNotification = spSettings.getString("selectedNotification" , "" ).toString()
         Log.i("sp", "$selectedNotification ")
 
         Log.i("TAG", "onViewCreated: $lon")
@@ -96,16 +96,12 @@ class HomeFragment : Fragment() {
         setUpHourlyRV()
         initViewModel()
 
-
-
-
-
     }
 
     private fun initViewModel(){
         val remoteDataSource : WeatherRemoteDataSource = WeatherRemoteDataSourceImpl.getInstance()
-
-        val repository: Repository = RepositoryImpl(remoteDataSource , WeatherLocalDataSourceImpl.getInstance(requireContext()))
+        val localDataSource : WeatherLocalDataSource =  WeatherLocalDataSourceImpl.getInstance(requireContext())
+        val repository: Repository = RepositoryImpl(remoteDataSource ,localDataSource)
 
         val remoteFactory = HomeViewModelFactory(repository)
         viewModel = ViewModelProvider(this, remoteFactory)[HomeViewModel::class.java]
@@ -135,6 +131,9 @@ class HomeFragment : Fragment() {
                                 binding.weeklyRV.visibility = View.VISIBLE
                                 binding.homeConstraint.visibility = View.VISIBLE
                                 binding.newConstraint.visibility =View.VISIBLE
+
+                                TemperatureDegree(selectedUnit)
+
                                 binding.temperature.text = result.data.current.temp.toString()
                                 binding.pressureEdit.text = result.data.current.pressure.toString()
                                 binding.humidityEdit.text = result.data.current.humidity.toString()
@@ -265,6 +264,15 @@ class HomeFragment : Fragment() {
         }
 
         return locationText.toString()
+    }
+
+    fun TemperatureDegree( unit : String) : String{
+        when(unit){
+            "Fahrenheit" ->  binding.MeasurementTemperatureDegree.text = "F"
+            "Celsius" -> binding.MeasurementTemperatureDegree.text = "C"
+            else -> binding.MeasurementTemperatureDegree.text = "K"
+        }
+        return unit
     }
 
 

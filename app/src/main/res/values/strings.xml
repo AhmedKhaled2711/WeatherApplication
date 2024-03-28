@@ -19,4 +19,10 @@
     <string name="wind_speed">Wind Speed</string>
     <string name="meter_sec">Meter / Sec</string>
     <string name="mile_hour">Mile / Hour</string>
+    <string name="pressure">Pressure</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind">Wind</string>
+    <string name="cloud">Cloud</string>
+    <string name="ultra_violet">Ultra Violet</string>
+    <string name="visibility">Visibility</string>
 </resources>

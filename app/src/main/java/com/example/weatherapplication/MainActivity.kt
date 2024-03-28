@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity() {
                 // Toast.makeText(this@MainActivity ,locationResult.toString() , Toast.LENGTH_LONG ).show()
                 editor.putString("longitude" , locationResult.lastLocation?.longitude.toString())
                 editor.putString("latitude",locationResult.lastLocation?.latitude.toString())
+                editor.apply()
 
             }
         }
@@ -86,12 +87,13 @@ class MainActivity : AppCompatActivity() {
         locationProviderClient.requestLocationUpdates(locationRequest , locationCallback , Looper.myLooper())
 
 
-
-
-
     }
 
 
-
+    fun restart() {
+        val intent = intent
+        finish()
+        startActivity(intent)
+    }
 
 }

@@ -15,6 +15,7 @@ import com.example.weatherapplication.model.Hourly
 class HourlyAdapter(private var context: Context) :
     ListAdapter <Hourly , HourlyAdapter.MyViewHolder> (HourlyDiffUtil()){
     lateinit var binding : HourlyCardBinding
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflater: LayoutInflater =
             parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -29,7 +30,7 @@ class HourlyAdapter(private var context: Context) :
         Glide.with(context).load("https://openweathermap.org/img/wn/"+
                 current.weather[0].icon+"@2x.png")
             .into(holder.binding.ivTemperatureIcon)
-        holder.binding.tvTemperatureDegree.text = current.temp.toString()+" C"
+        holder.binding.tvTemperatureDegree.text = current.temp.toString()
 
     }
 

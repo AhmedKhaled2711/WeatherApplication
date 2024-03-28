@@ -14,6 +14,7 @@ import com.example.weatherapplication.MainActivity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.FragmentSettingsBinding
 import com.example.weatherapplication.favorite.view.FavoriteFragmentDirections
+import java.util.Locale
 
 class SettingsFragment : Fragment() {
 
@@ -56,6 +57,14 @@ class SettingsFragment : Fragment() {
                 R.id.btn_arabic -> "ar"
                 else -> ""
             }
+
+            val locale = Locale(selectedLanguage)
+            Locale.setDefault(locale)
+            val configuration = resources.configuration
+            configuration.setLocale(locale)
+            resources.updateConfiguration(configuration, resources.displayMetrics)
+            (requireActivity() as MainActivity).restart()
+
             editor.putString("selectedLanguage" ,selectedLanguage )
             editor.apply()
         }
