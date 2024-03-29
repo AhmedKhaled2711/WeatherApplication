@@ -129,8 +129,6 @@ class DetailsFragment : Fragment() {
         lifecycleScope.launch {
             if (isNetworkConnected(requireContext())) {
                 Toast.makeText(requireContext() , "Data from Network", Toast.LENGTH_SHORT).show()
-                Log.i("TAG", "initViewModel:$lon ")
-                Log.i("TAG", "initViewModel:$lat ")
 
                 viewModel.getWeatherDetails(lat , lon , getMeasurementSystem(selectedUnit),selectedLanguage )
                 lifecycleScope.launch {
@@ -157,9 +155,7 @@ class DetailsFragment : Fragment() {
                                 binding.cloudEdit.text = result.data.current.clouds.toString()
                                 binding.ultravioletEdit.text = result.data.current.uvi.toString()
                                 binding.visibilityEdit.text = result.data.current.visibility.toString()
-                                Log.i("TAG", "getAddressEnglish:$lon ")
-                                Log.i("TAG", "getAddressEnglish:$lat ")
-                                binding.cityCountry.text = getAddressEnglish(requireContext(), lat,lon)
+                                binding.cityCountry.text =  result.data.timezone.split("/")[1]
                                 Glide.with(requireContext()).load("https://openweathermap.org/img/wn/"
                                         + result.data.current.weather[0].icon+"@4x.png").into(binding.iv)
                                 binding.descOfWeather.text  = result.data.current.weather[0].description

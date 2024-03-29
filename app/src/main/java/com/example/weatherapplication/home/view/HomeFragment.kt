@@ -17,6 +17,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.weatherapplication.MainActivity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.StateRemote
 import com.example.weatherapplication.cityDetails.view.DetailsFragmentArgs
@@ -74,6 +75,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         sharedPreferencesLocation = requireActivity().getSharedPreferences("locationKey" , Context.MODE_PRIVATE)
         lon = sharedPreferencesLocation.getString("longitude" , "0")!!.toDouble()
         lat = sharedPreferencesLocation.getString("latitude" , "0")!!.toDouble()
@@ -96,6 +99,8 @@ class HomeFragment : Fragment() {
         setUpHourlyRV()
         initViewModel()
 
+
+
     }
 
     private fun initViewModel(){
@@ -106,12 +111,9 @@ class HomeFragment : Fragment() {
         val remoteFactory = HomeViewModelFactory(repository)
         viewModel = ViewModelProvider(this, remoteFactory)[HomeViewModel::class.java]
 
-        viewModel.getWeatherDetails(lat , lon , getMeasurementSystem(selectedUnit) ,selectedLanguage )
         lifecycleScope.launch {
             if (isNetworkConnected(requireContext())) {
                 Toast.makeText(requireContext() , "Data from Network", Toast.LENGTH_SHORT).show()
-                Log.i("TAG", "initViewModel:$lon ")
-                Log.i("TAG", "initViewModel:$lat ")
 
                 viewModel.getWeatherDetails(lat , lon , getMeasurementSystem(selectedUnit),selectedLanguage )
                 lifecycleScope.launch {
@@ -131,9 +133,7 @@ class HomeFragment : Fragment() {
                                 binding.weeklyRV.visibility = View.VISIBLE
                                 binding.homeConstraint.visibility = View.VISIBLE
                                 binding.newConstraint.visibility =View.VISIBLE
-
                                 TemperatureDegree(selectedUnit)
-
                                 binding.temperature.text = result.data.current.temp.toString()
                                 binding.pressureEdit.text = result.data.current.pressure.toString()
                                 binding.humidityEdit.text = result.data.current.humidity.toString()
@@ -141,9 +141,7 @@ class HomeFragment : Fragment() {
                                 binding.cloudEdit.text = result.data.current.clouds.toString()
                                 binding.ultravioletEdit.text = result.data.current.uvi.toString()
                                 binding.visibilityEdit.text = result.data.current.visibility.toString()
-                                Log.i("TAG", "getAddressEnglish:$lon ")
-                                Log.i("TAG", "getAddressEnglish:$lat ")
-                                binding.cityCountry.text = getAddressEnglish(requireContext(), lat,lon)
+                                binding.cityCountry.text =  result.data.timezone.split("/")[1]
                                 Glide.with(requireContext()).load("https://openweathermap.org/img/wn/"
                                         + result.data.current.weather[0].icon+"@4x.png").into(binding.iv)
                                 binding.descOfWeather.text  = result.data.current.weather[0].description
@@ -188,9 +186,8 @@ class HomeFragment : Fragment() {
                                 binding.cloudEdit.text = result.data.current.clouds.toString()
                                 binding.ultravioletEdit.text = result.data.current.uvi.toString()
                                 binding.visibilityEdit.text = result.data.current.visibility.toString()
-                                Log.i("TAG", "getAddressEnglish:$lon ")
-                                Log.i("TAG", "getAddressEnglish:$lat ")
-                                binding.cityCountry.text = getAddressEnglish(requireContext(), lat,lon)
+
+                                binding.cityCountry.text =  result.data.timezone.split("/")[1]
                                 Glide.with(requireContext()).load("https://openweathermap.org/img/wn/"
                                         + result.data.current.weather[0].icon+"@4x.png").into(binding.iv)
                                 binding.descOfWeather.text  = result.data.current.weather[0].description

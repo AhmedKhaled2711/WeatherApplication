@@ -25,4 +25,5 @@ interface WeatherDao {
     fun getCurrentWeather(): Flow<Model>
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertCurrentWeather(model: Model)
+
 }

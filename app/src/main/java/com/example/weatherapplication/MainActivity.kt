@@ -26,6 +26,8 @@ import java.util.Locale
 class MainActivity : AppCompatActivity() {
 
     val locationRequestID = 1000
+    private lateinit var selectedLanguage: String
+    private lateinit var spSettings: SharedPreferences
     private lateinit var locationCallback : LocationCallback
     private lateinit var locationProviderClient: FusedLocationProviderClient
     private lateinit var sharedPreferences: SharedPreferences
@@ -37,6 +39,18 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        spSettings= this.getSharedPreferences("settings" , Context.MODE_PRIVATE)
+        selectedLanguage = spSettings.getString("selectedLanguage" , "" ).toString()
+        Log.i("sp", "$selectedLanguage ")
+
+        val locale = Locale(selectedLanguage)
+        Locale.setDefault(locale)
+        val configuration = resources.configuration
+        configuration.setLocale(locale)
+        resources.updateConfiguration(configuration, resources.displayMetrics)
+        //(this).restart()
+
         bottomNavigationView = findViewById(R.id.bottomNav)
 
         sharedPreferences = this.getSharedPreferences("locationKey" , Context.MODE_PRIVATE)
