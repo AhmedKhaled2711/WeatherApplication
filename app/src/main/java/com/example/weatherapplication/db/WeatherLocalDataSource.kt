@@ -1,11 +1,8 @@
 package com.example.weatherapplication.db
 
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
 import com.example.weatherapplication.model.Model
 import com.example.weatherapplication.model.StoreLatitudeLongitude
+import com.example.weatherapplication.model.AlertNotification
 import kotlinx.coroutines.flow.Flow
 
 interface WeatherLocalDataSource {
@@ -20,8 +17,7 @@ interface WeatherLocalDataSource {
 
     suspend fun insertCurrentWeather(model: Model)
 
-
-
-
-
+    suspend fun getAllSavedAlerts(): Flow<List<AlertNotification>>
+    suspend fun insertNotification(alert: AlertNotification)
+    suspend fun deleteNotification(alert: AlertNotification)
 }

@@ -13,16 +13,20 @@ import com.example.weatherapplication.messageExtra
 import com.example.weatherapplication.notificationID
 import com.example.weatherapplication.titleExtra
 
+
 class Notification : BroadcastReceiver() {
 
     // Method called when the broadcast is received
     override fun onReceive(context: Context, intent: Intent) {
 
-        val i = Intent(context , MainActivity::class.java)
+        val i = Intent(context, MainActivity::class.java)
 
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        // Create a copy of the intent and set flags on the copy
+        val newIntent = i.apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
 
-        val pendingIntent : PendingIntent = PendingIntent.getActivity(context , 0 , i ,
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, newIntent,
             PendingIntent.FLAG_IMMUTABLE)
 
         // Build the notification using NotificationCompat.Builder

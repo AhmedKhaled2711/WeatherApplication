@@ -9,8 +9,9 @@ import com.example.weatherapplication.db.WeatherDao
 import com.example.weatherapplication.model.Model
 import com.example.weatherapplication.model.ModelConverter
 import com.example.weatherapplication.model.StoreLatitudeLongitude
+import com.example.weatherapplication.model.AlertNotification
 
-@Database(entities = arrayOf(StoreLatitudeLongitude::class , Model::class ) , version =  3 , exportSchema = false)
+@Database(entities = arrayOf(StoreLatitudeLongitude::class , Model::class , AlertNotification::class) , version =  5 , exportSchema = false)
 @TypeConverters(ModelConverter::class)
 abstract class WeatherDataBase : RoomDatabase() {
 

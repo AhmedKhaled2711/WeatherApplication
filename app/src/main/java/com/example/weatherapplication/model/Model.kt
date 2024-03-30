@@ -1,11 +1,9 @@
 package com.example.weatherapplication.model
 
-import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import kotlinx.android.parcel.Parcelize
 import org.jetbrains.annotations.Nullable
@@ -124,3 +122,12 @@ data class StoreLatitudeLongitude(
     var latitude: Double,
     var name: String?
 ) : Parcelable
+
+@Parcelize
+@Entity(tableName = "alert_table")
+data class AlertNotification(
+
+    @PrimaryKey(autoGenerate = false)
+    var time : Long
+
+): Parcelable

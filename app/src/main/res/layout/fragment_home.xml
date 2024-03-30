@@ -35,7 +35,7 @@
 
             <TextView
                 android:id="@+id/city_country"
-                android:layout_width="280dp"
+                android:layout_width="202dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/rectangle"
@@ -44,8 +44,9 @@
                 android:gravity="center"
                 android:padding="8dp"
                 android:text=""
-                android:textSize="15sp"
+                android:textSize="20sp"
                 android:textStyle="italic|bold"
+                android:textColor="#201658"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"

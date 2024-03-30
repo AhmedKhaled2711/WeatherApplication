@@ -1,10 +1,8 @@
 package com.example.weatherapplication.model
 
-import android.util.Log
 import com.example.weatherapplication.db.WeatherLocalDataSource
 import com.example.weatherapplication.remoteDataSource.WeatherRemoteDataSource
 import kotlinx.coroutines.flow.Flow
-import retrofit2.Response
 
 class RepositoryImpl(private val remoteDataSource: WeatherRemoteDataSource,
                      private val localDataSource: WeatherLocalDataSource
@@ -38,6 +36,18 @@ class RepositoryImpl(private val remoteDataSource: WeatherRemoteDataSource,
 
     override suspend fun insertCurrentWeather(model: Model) {
         return localDataSource.insertCurrentWeather(model)
+    }
+
+    override suspend fun getAllSavedAlerts(): Flow<List<AlertNotification>> {
+        return localDataSource.getAllSavedAlerts()
+    }
+
+    override suspend fun insertNotification(alert: AlertNotification) {
+        return localDataSource.insertNotification(alert)
+    }
+
+    override suspend fun deleteNotification(alert: AlertNotification) {
+        return localDataSource.deleteNotification(alert)
     }
 
     companion object {

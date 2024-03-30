@@ -5,14 +5,16 @@ import android.location.Address
 import android.location.Geocoder
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import com.example.weatherapplication.model.AlertNotification
 import com.example.weatherapplication.model.Model
 import com.example.weatherapplication.model.StoreLatitudeLongitude
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+// Constants for notification
 const val notificationID = 121
-var channelID = "channel1"
+const val channelID = "channel1"
 const val titleExtra = "titleExtra"
 const val messageExtra = "messageExtra"
 
@@ -41,6 +43,14 @@ sealed class StateDB{
     object Loading:StateDB()
 
 }
+
+sealed class StateNotification{
+    data class Success(val data: List<AlertNotification>):StateNotification()
+    data class Failure(val msg:Throwable):StateNotification()
+    object Loading:StateNotification()
+
+}
+
 sealed class StateRemote{
     data class Success(val data: Model):StateRemote()
     data class Failure(val msg:Throwable):StateRemote()

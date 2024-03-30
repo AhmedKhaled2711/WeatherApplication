@@ -1,7 +1,6 @@
 package com.example.weatherapplication.model
 
 import kotlinx.coroutines.flow.Flow
-import retrofit2.Response
 
 interface Repository {
 
@@ -18,5 +17,9 @@ interface Repository {
     suspend fun getCurrentWeather(): Flow<Model>
 
     suspend fun insertCurrentWeather(model: Model)
+
+    suspend fun getAllSavedAlerts(): Flow<List<AlertNotification>>
+    suspend fun insertNotification(alert: AlertNotification)
+    suspend fun deleteNotification(alert: AlertNotification)
 
 }

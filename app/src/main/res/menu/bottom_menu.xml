@@ -2,20 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/homeFragment"
-        android:title="Home"
+        android:title="@string/home"
         android:icon="@drawable/ic_home"/>
 
 
     <item android:id="@+id/alertFragment"
-        android:title="Alert"
+        android:title="@string/alert"
         android:icon="@drawable/ic_alert"/>
 
     <item android:id="@+id/favoriteFragment"
-        android:title="Favorite"
-        android:icon="@drawable/ic_favorite"/>
+        android:title="@string/favorite"
+        android:icon="@drawable/ic_bookmarks"/>
 
     <item android:id="@+id/settingsFragment"
-        android:title="Settings"
+        android:title="@string/settings"
         android:icon="@drawable/ic_settings"/>
 
 </menu>

@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.dayone.Five.WeatherDataBase
 import com.example.weatherapplication.model.Model
 import com.example.weatherapplication.model.StoreLatitudeLongitude
+import com.example.weatherapplication.model.AlertNotification
 import kotlinx.coroutines.flow.Flow
 
 class WeatherLocalDataSourceImpl(context: Context) : WeatherLocalDataSource{
@@ -41,5 +42,17 @@ class WeatherLocalDataSourceImpl(context: Context) : WeatherLocalDataSource{
 
     override suspend fun insertCurrentWeather(model: Model) {
         return weatherDao!!.insertCurrentWeather(model)
+    }
+
+    override suspend fun getAllSavedAlerts(): Flow<List<AlertNotification>> {
+        return weatherDao!!.getAllSavedAlerts()
+    }
+
+    override suspend fun insertNotification(alert: AlertNotification) {
+        return weatherDao!!.insertNotification(alert)
+    }
+
+    override suspend fun deleteNotification(alert: AlertNotification) {
+        return weatherDao!!.deleteNotification(alert)
     }
 }
