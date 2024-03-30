@@ -141,19 +141,20 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
         val intent = Intent(requireContext(), Notification::class.java)
         val title = bindingDialog.title.text.toString()
         val message = bindingDialog.message.text.toString()
+        val time = getTime()
 
         intent.putExtra(titleExtra, title)
         intent.putExtra(messageExtra, message)
 
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext(),
-            notificationID,
+            time.toInt(),
             intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val time = getTime()
+
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             time,
@@ -221,6 +222,7 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
         builder.setTitle("Confirm Deletion")
         builder.setMessage("Are you sure you want to remove this  alert?")
         builder.setPositiveButton("Yes") { _, _ ->
+            cancelAlarm(alertNotification)
             viewModel.deleteAlert(alertNotification)
             Toast.makeText(requireContext(), "Alert removed", Toast.LENGTH_LONG).show()
         }
@@ -231,7 +233,6 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
     }
 
     fun initViewModel(){
-
         lifecycleScope.launch {
             viewModel.alertNotifications.collectLatest {result ->
                 when(result){
@@ -265,6 +266,19 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
         adapter = AdapterAlerts(this, requireActivity())
         adapter.submitList(emptyList())
         binding.NotificationRV.adapter = adapter
+    }
+
+    private fun cancelAlarm(alertNotification: AlertNotification){
+        val intent = Intent(requireContext(), Notification::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext(),
+            alertNotification.time.toInt(),
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.cancel(pendingIntent)
     }
 
 }

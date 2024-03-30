@@ -93,8 +93,7 @@ class HomeFragment : Fragment() {
         selectedNotification = spSettings.getString("selectedNotification" , "" ).toString()
         Log.i("sp", "$selectedNotification ")
 
-        Log.i("TAG", "onViewCreated: $lon")
-        Log.i("TAG", "onViewCreated: $lat")
+
         setUpDailyRV()
         setUpHourlyRV()
         initViewModel()
@@ -230,37 +229,6 @@ class HomeFragment : Fragment() {
             adapter = hourlyAdapter
             layoutManager = hourlyLayoutManager
         }
-    }
-
-
-    fun getCityAndCountryFromCoordinates(context: Context, latitude: Double, longitude: Double): String {
-        val geocoder = Geocoder(context, Locale.getDefault())
-        var city: String? = null
-        var country: String? = null
-
-        try {
-            val addresses: MutableList<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
-            if (addresses != null && addresses.isNotEmpty()) {
-                val address: Address = addresses[0]
-                city = address.locality
-                country = address.countryName
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        val locationText = StringBuilder()
-        if (!city.isNullOrEmpty()) {
-            locationText.append(city)
-        }
-        if (!country.isNullOrEmpty()) {
-            if (locationText.isNotEmpty()) {
-                locationText.append(", ")
-            }
-            locationText.append(country)
-        }
-
-        return locationText.toString()
     }
 
     fun TemperatureDegree( unit : String) : String{

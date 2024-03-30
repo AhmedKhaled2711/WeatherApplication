@@ -5,43 +5,89 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.media.MediaPlayer
+import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.weatherapplication.MainActivity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.channelID
+import com.example.weatherapplication.db.WeatherLocalDataSource
+import com.example.weatherapplication.db.WeatherLocalDataSourceImpl
 import com.example.weatherapplication.messageExtra
+import com.example.weatherapplication.model.Model
+import com.example.weatherapplication.model.Repository
+import com.example.weatherapplication.model.RepositoryImpl
 import com.example.weatherapplication.notificationID
+import com.example.weatherapplication.remoteDataSource.WeatherRemoteDataSource
+import com.example.weatherapplication.remoteDataSource.WeatherRemoteDataSourceImpl
 import com.example.weatherapplication.titleExtra
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class Notification : BroadcastReceiver() {
 
-    // Method called when the broadcast is received
+    private var mediaPlayer: MediaPlayer? = null
+    private lateinit var sharedPreferencesLocation: SharedPreferences
+    private var lon = 0.0
+    private var lat = 0.0
+
     override fun onReceive(context: Context, intent: Intent) {
 
-        val i = Intent(context, MainActivity::class.java)
+        playSong(context)
+        CoroutineScope(Dispatchers.IO).launch {
+            val weather = getAlertNotification(context)
+            val i = Intent(context, MainActivity::class.java)
 
-        // Create a copy of the intent and set flags on the copy
-        val newIntent = i.apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            val newIntent = i.apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+
+            val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, newIntent,
+                PendingIntent.FLAG_IMMUTABLE)
+
+            val bigTextStyle = NotificationCompat.BigTextStyle()
+            bigTextStyle.bigText(weather.alerts?.get(0)?.description)
+            bigTextStyle.setBigContentTitle(weather.timezone.split("/")[1])
+
+            val notification = NotificationCompat.Builder(context, channelID)
+                .setSmallIcon(R.drawable.ic_alert)
+                .setContentTitle(weather.timezone.split("/")[1])
+                .setContentText(weather.alerts?.get(0)?.description)
+                .setStyle(bigTextStyle)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .build()
+
+            val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            manager.notify(notificationID, notification)
         }
 
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, newIntent,
-            PendingIntent.FLAG_IMMUTABLE)
+    }
 
-        // Build the notification using NotificationCompat.Builder
-        val notification = NotificationCompat.Builder(context, channelID)
-            .setSmallIcon(R.drawable.ic_alert)
-            .setContentTitle(intent.getStringExtra(titleExtra)) // Set title from intent
-            .setContentText(intent.getStringExtra(messageExtra))
-            .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
-            .build()
+    private fun playSong(context: Context) {
+        mediaPlayer = MediaPlayer.create(context, R.raw.relax)
+        mediaPlayer?.start()
+    }
 
-        // Get the NotificationManager service
-        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    private suspend fun getAlertNotification(context: Context): Model {
+        sharedPreferencesLocation =
+            context.getSharedPreferences("locationKey", Context.MODE_PRIVATE)
+        lon = sharedPreferencesLocation.getString("longitude", "0")!!.toDouble()
+        lat = sharedPreferencesLocation.getString("latitude", "0")!!.toDouble()
+        Log.i("not", "onReceive: $lon  $lat ")
 
-        // Show the notification using the manager
-        manager.notify(notificationID, notification)
+        val remoteDataSource: WeatherRemoteDataSource = WeatherRemoteDataSourceImpl.getInstance()
+        val localDataSource: WeatherLocalDataSource =
+            WeatherLocalDataSourceImpl.getInstance(context)
+        val repository: Repository = RepositoryImpl(remoteDataSource, localDataSource)
+
+        //Log.i("not", "onReceive: ${weather.alerts?.get(0)} ")
+        return repository.getWeather(lat, lon, "metric", "en")
     }
 }
+

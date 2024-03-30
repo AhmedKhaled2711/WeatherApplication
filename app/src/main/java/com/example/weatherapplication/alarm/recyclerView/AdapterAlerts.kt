@@ -34,7 +34,7 @@ class AdapterAlerts  (private val listener: OnRemoveClickListener, private val c
         val date = Date(current.time)
         val dateFormat = android.text.format.DateFormat.getLongDateFormat(context)
         val timeFormat = android.text.format.DateFormat.getTimeFormat(context)
-        holder.binding.tvTimeNotification.text = dateFormat.format(date) + timeFormat.format(date)
+        holder.binding.tvTimeNotification.text = dateFormat.format(date) +" "+ timeFormat.format(date)
 
         binding.ivDeleteNotification.setOnClickListener{
             listener.onRemoveClick(current)

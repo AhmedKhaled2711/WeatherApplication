@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
         val configuration = resources.configuration
         configuration.setLocale(locale)
         resources.updateConfiguration(configuration, resources.displayMetrics)
-        //(this).restart()
 
         bottomNavigationView = findViewById(R.id.bottomNav)
 
