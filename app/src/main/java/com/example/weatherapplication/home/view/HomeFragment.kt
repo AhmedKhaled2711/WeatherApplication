@@ -51,6 +51,8 @@ class HomeFragment : Fragment() {
 
     private var lon = 0.0
     private var lat = 0.0
+    private var lonMap = 0.0
+    private var latMap = 0.0
     private lateinit var selectedUnit: String
     private lateinit var selectedLanguage: String
     private lateinit var selectedLocation: String
@@ -58,12 +60,15 @@ class HomeFragment : Fragment() {
     private lateinit var selectedNotification: String
     private lateinit var sharedPreferencesLocation: SharedPreferences
     private lateinit var spSettings: SharedPreferences
+    private lateinit var spMapLocation: SharedPreferences
     private lateinit var viewModel: HomeViewModel
     private lateinit var hourlyAdapter : HourlyAdapter
     private lateinit var dailyAdapter : DailyAdapter
     private lateinit var hourlyLayoutManager: LinearLayoutManager
     private lateinit var daillyLayoutManager: LinearLayoutManager
     private lateinit var binding: FragmentHomeBinding
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -75,8 +80,12 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //Map
+        spMapLocation = requireActivity().getSharedPreferences("MapLocation" , Context.MODE_PRIVATE)
+        lonMap = spMapLocation.getString("longitudeSettings" , "0")!!.toDouble()
+        latMap = spMapLocation.getString("latitudeSettings" , "0")!!.toDouble()
 
-
+        //GPS
         sharedPreferencesLocation = requireActivity().getSharedPreferences("locationKey" , Context.MODE_PRIVATE)
         lon = sharedPreferencesLocation.getString("longitude" , "0")!!.toDouble()
         lat = sharedPreferencesLocation.getString("latitude" , "0")!!.toDouble()
@@ -106,107 +115,208 @@ class HomeFragment : Fragment() {
         val remoteDataSource : WeatherRemoteDataSource = WeatherRemoteDataSourceImpl.getInstance()
         val localDataSource : WeatherLocalDataSource =  WeatherLocalDataSourceImpl.getInstance(requireContext())
         val repository: Repository = RepositoryImpl(remoteDataSource ,localDataSource)
-
         val remoteFactory = HomeViewModelFactory(repository)
         viewModel = ViewModelProvider(this, remoteFactory)[HomeViewModel::class.java]
 
-        lifecycleScope.launch {
-            if (isNetworkConnected(requireContext())) {
-                Toast.makeText(requireContext() , "Data from Network", Toast.LENGTH_SHORT).show()
+        if (selectedLocation == "GPS"){
+            lifecycleScope.launch {
+                if (isNetworkConnected(requireContext())) {
+                    Toast.makeText(requireContext() , "Data from Network", Toast.LENGTH_SHORT).show()
 
-                viewModel.getWeatherDetails(lat , lon , getMeasurementSystem(selectedUnit),selectedLanguage )
-                lifecycleScope.launch {
-                    viewModel.weatherDetails.collectLatest { result ->
-                        when(result){
-                            is StateRemote.Loading ->{
-                                binding.progressBar.visibility = View.VISIBLE
-                                binding.DailyRv.visibility = View.GONE
-                                binding.weeklyRV.visibility = View.GONE
-                                binding.homeConstraint.visibility = View.GONE
-                                binding.newConstraint.visibility = View.GONE
-                            }
+                    viewModel.getWeatherDetails(lat , lon , getMeasurementSystem(selectedUnit),selectedLanguage )
+                    lifecycleScope.launch {
+                        viewModel.weatherDetails.collectLatest { result ->
+                            when(result){
+                                is StateRemote.Loading ->{
+                                    binding.progressBar.visibility = View.VISIBLE
+                                    binding.DailyRv.visibility = View.GONE
+                                    binding.weeklyRV.visibility = View.GONE
+                                    binding.homeConstraint.visibility = View.GONE
+                                    binding.newConstraint.visibility = View.GONE
+                                }
 
-                            is StateRemote.Success ->{
-                                binding.progressBar.visibility = View.GONE
-                                binding.DailyRv.visibility = View.VISIBLE
-                                binding.weeklyRV.visibility = View.VISIBLE
-                                binding.homeConstraint.visibility = View.VISIBLE
-                                binding.newConstraint.visibility =View.VISIBLE
-                                TemperatureDegree(selectedUnit)
-                                binding.temperature.text = result.data.current.temp.toString()
-                                binding.pressureEdit.text = result.data.current.pressure.toString()
-                                binding.humidityEdit.text = result.data.current.humidity.toString()
-                                binding.windEdit.text = result.data.current.wind_speed.toString()
-                                binding.cloudEdit.text = result.data.current.clouds.toString()
-                                binding.ultravioletEdit.text = result.data.current.uvi.toString()
-                                binding.visibilityEdit.text = result.data.current.visibility.toString()
-                                binding.cityCountry.text =  result.data.timezone.split("/")[1]
-                                Glide.with(requireContext()).load("https://openweathermap.org/img/wn/"
-                                        + result.data.current.weather[0].icon+"@4x.png").into(binding.iv)
-                                binding.descOfWeather.text  = result.data.current.weather[0].description
-                                binding.today.text = getCurrentTime(result.data.current.dt)
+                                is StateRemote.Success ->{
+                                    binding.progressBar.visibility = View.GONE
+                                    binding.DailyRv.visibility = View.VISIBLE
+                                    binding.weeklyRV.visibility = View.VISIBLE
+                                    binding.homeConstraint.visibility = View.VISIBLE
+                                    binding.newConstraint.visibility =View.VISIBLE
+                                    TemperatureDegree(selectedUnit)
+                                    binding.temperature.text = result.data.current.temp.toString()
+                                    binding.pressureEdit.text = result.data.current.pressure.toString()
+                                    binding.humidityEdit.text = result.data.current.humidity.toString()
+                                    binding.windEdit.text = result.data.current.wind_speed.toString()
+                                    binding.cloudEdit.text = result.data.current.clouds.toString()
+                                    binding.ultravioletEdit.text = result.data.current.uvi.toString()
+                                    binding.visibilityEdit.text = result.data.current.visibility.toString()
+                                    binding.cityCountry.text =  result.data.timezone.split("/")[1]
+                                    Glide.with(requireContext()).load("https://openweathermap.org/img/wn/"
+                                            + result.data.current.weather[0].icon+"@4x.png").into(binding.iv)
+                                    binding.descOfWeather.text  = result.data.current.weather[0].description
+                                    binding.today.text = getCurrentTime(result.data.current.dt)
 
-                                viewModel.insertCurrentWeather(result.data)
-                                dailyAdapter.submitList(result.data.daily.subList(0,7))
-                                hourlyAdapter.submitList(result.data.hourly.subList(0,24))
-                            }
+                                    viewModel.insertCurrentWeather(result.data)
+                                    dailyAdapter.submitList(result.data.daily.subList(0,7))
+                                    hourlyAdapter.submitList(result.data.hourly.subList(0,24))
+                                }
 
-                            else ->{
-                                binding.progressBar.visibility = View.GONE
-                                Log.i("Error", "Error: ")
-                            }
-                        }
-                    }
-                }
-
-            } else {
-                viewModel.getCurrentWeather()
-                lifecycleScope.launch {
-                    viewModel.weatherDetailsDB.collectLatest { result ->
-                        when(result){
-                            is StateRemote.Loading ->{
-                                binding.progressBar.visibility = View.VISIBLE
-                                binding.DailyRv.visibility = View.GONE
-                                binding.weeklyRV.visibility = View.GONE
-                                binding.homeConstraint.visibility = View.GONE
-                                binding.newConstraint.visibility = View.GONE
-                            }
-
-                            is StateRemote.Success ->{
-                                binding.progressBar.visibility = View.GONE
-                                binding.DailyRv.visibility = View.VISIBLE
-                                binding.weeklyRV.visibility = View.VISIBLE
-                                binding.homeConstraint.visibility = View.VISIBLE
-                                binding.newConstraint.visibility =View.VISIBLE
-                                binding.temperature.text = result.data.current.temp.toString()
-                                binding.pressureEdit.text = result.data.current.pressure.toString()
-                                binding.humidityEdit.text = result.data.current.humidity.toString()
-                                binding.windEdit.text = result.data.current.wind_speed.toString()
-                                binding.cloudEdit.text = result.data.current.clouds.toString()
-                                binding.ultravioletEdit.text = result.data.current.uvi.toString()
-                                binding.visibilityEdit.text = result.data.current.visibility.toString()
-
-                                binding.cityCountry.text =  result.data.timezone.split("/")[1]
-                                Glide.with(requireContext()).load("https://openweathermap.org/img/wn/"
-                                        + result.data.current.weather[0].icon+"@4x.png").into(binding.iv)
-                                binding.descOfWeather.text  = result.data.current.weather[0].description
-                                binding.today.text = getCurrentTime(result.data.current.dt)
-
-                                viewModel.insertCurrentWeather(result.data)
-                                dailyAdapter.submitList(result.data.daily.subList(0,7))
-                                hourlyAdapter.submitList(result.data.hourly.subList(0,24))
-                            }
-
-                            else ->{
-                                binding.progressBar.visibility = View.GONE
-                                Log.i("Error", "Error: ")
+                                else ->{
+                                    binding.progressBar.visibility = View.GONE
+                                    Log.i("Error", "Error: ")
+                                }
                             }
                         }
                     }
-                }
 
+                } else {
+                    viewModel.getCurrentWeather()
+                    lifecycleScope.launch {
+                        viewModel.weatherDetailsDB.collectLatest { result ->
+                            when(result){
+                                is StateRemote.Loading ->{
+                                    binding.progressBar.visibility = View.VISIBLE
+                                    binding.DailyRv.visibility = View.GONE
+                                    binding.weeklyRV.visibility = View.GONE
+                                    binding.homeConstraint.visibility = View.GONE
+                                    binding.newConstraint.visibility = View.GONE
+                                }
+
+                                is StateRemote.Success ->{
+                                    binding.progressBar.visibility = View.GONE
+                                    binding.DailyRv.visibility = View.VISIBLE
+                                    binding.weeklyRV.visibility = View.VISIBLE
+                                    binding.homeConstraint.visibility = View.VISIBLE
+                                    binding.newConstraint.visibility =View.VISIBLE
+                                    binding.temperature.text = result.data.current.temp.toString()
+                                    binding.pressureEdit.text = result.data.current.pressure.toString()
+                                    binding.humidityEdit.text = result.data.current.humidity.toString()
+                                    binding.windEdit.text = result.data.current.wind_speed.toString()
+                                    binding.cloudEdit.text = result.data.current.clouds.toString()
+                                    binding.ultravioletEdit.text = result.data.current.uvi.toString()
+                                    binding.visibilityEdit.text = result.data.current.visibility.toString()
+
+                                    binding.cityCountry.text =  result.data.timezone.split("/")[1]
+                                    Glide.with(requireContext()).load("https://openweathermap.org/img/wn/"
+                                            + result.data.current.weather[0].icon+"@4x.png").into(binding.iv)
+                                    binding.descOfWeather.text  = result.data.current.weather[0].description
+                                    binding.today.text = getCurrentTime(result.data.current.dt)
+
+                                    viewModel.insertCurrentWeather(result.data)
+                                    dailyAdapter.submitList(result.data.daily.subList(0,7))
+                                    hourlyAdapter.submitList(result.data.hourly.subList(0,24))
+                                }
+
+                                else ->{
+                                    binding.progressBar.visibility = View.GONE
+                                    Log.i("Error", "Error: ")
+                                }
+                            }
+                        }
+                    }
+
+                }
             }
         }
+        else{
+            lifecycleScope.launch {
+                if (isNetworkConnected(requireContext())) {
+                    Toast.makeText(requireContext() , "Data from Network", Toast.LENGTH_SHORT).show()
+
+                    viewModel.getWeatherDetails(latMap , lonMap , getMeasurementSystem(selectedUnit),selectedLanguage )
+                    lifecycleScope.launch {
+                        viewModel.weatherDetails.collectLatest { result ->
+                            when(result){
+                                is StateRemote.Loading ->{
+                                    binding.progressBar.visibility = View.VISIBLE
+                                    binding.DailyRv.visibility = View.GONE
+                                    binding.weeklyRV.visibility = View.GONE
+                                    binding.homeConstraint.visibility = View.GONE
+                                    binding.newConstraint.visibility = View.GONE
+                                }
+
+                                is StateRemote.Success ->{
+                                    binding.progressBar.visibility = View.GONE
+                                    binding.DailyRv.visibility = View.VISIBLE
+                                    binding.weeklyRV.visibility = View.VISIBLE
+                                    binding.homeConstraint.visibility = View.VISIBLE
+                                    binding.newConstraint.visibility =View.VISIBLE
+                                    TemperatureDegree(selectedUnit)
+                                    binding.temperature.text = result.data.current.temp.toString()
+                                    binding.pressureEdit.text = result.data.current.pressure.toString()
+                                    binding.humidityEdit.text = result.data.current.humidity.toString()
+                                    binding.windEdit.text = result.data.current.wind_speed.toString()
+                                    binding.cloudEdit.text = result.data.current.clouds.toString()
+                                    binding.ultravioletEdit.text = result.data.current.uvi.toString()
+                                    binding.visibilityEdit.text = result.data.current.visibility.toString()
+                                    binding.cityCountry.text =  result.data.timezone.split("/")[1]
+                                    Glide.with(requireContext()).load("https://openweathermap.org/img/wn/"
+                                            + result.data.current.weather[0].icon+"@4x.png").into(binding.iv)
+                                    binding.descOfWeather.text  = result.data.current.weather[0].description
+                                    binding.today.text = getCurrentTime(result.data.current.dt)
+
+                                    viewModel.insertCurrentWeather(result.data)
+                                    dailyAdapter.submitList(result.data.daily.subList(0,7))
+                                    hourlyAdapter.submitList(result.data.hourly.subList(0,24))
+                                }
+
+                                else ->{
+                                    binding.progressBar.visibility = View.GONE
+                                    Log.i("Error", "Error: ")
+                                }
+                            }
+                        }
+                    }
+
+                } else {
+                    viewModel.getCurrentWeather()
+                    lifecycleScope.launch {
+                        viewModel.weatherDetailsDB.collectLatest { result ->
+                            when(result){
+                                is StateRemote.Loading ->{
+                                    binding.progressBar.visibility = View.VISIBLE
+                                    binding.DailyRv.visibility = View.GONE
+                                    binding.weeklyRV.visibility = View.GONE
+                                    binding.homeConstraint.visibility = View.GONE
+                                    binding.newConstraint.visibility = View.GONE
+                                }
+
+                                is StateRemote.Success ->{
+                                    binding.progressBar.visibility = View.GONE
+                                    binding.DailyRv.visibility = View.VISIBLE
+                                    binding.weeklyRV.visibility = View.VISIBLE
+                                    binding.homeConstraint.visibility = View.VISIBLE
+                                    binding.newConstraint.visibility =View.VISIBLE
+                                    binding.temperature.text = result.data.current.temp.toString()
+                                    binding.pressureEdit.text = result.data.current.pressure.toString()
+                                    binding.humidityEdit.text = result.data.current.humidity.toString()
+                                    binding.windEdit.text = result.data.current.wind_speed.toString()
+                                    binding.cloudEdit.text = result.data.current.clouds.toString()
+                                    binding.ultravioletEdit.text = result.data.current.uvi.toString()
+                                    binding.visibilityEdit.text = result.data.current.visibility.toString()
+
+                                    binding.cityCountry.text =  result.data.timezone.split("/")[1]
+                                    Glide.with(requireContext()).load("https://openweathermap.org/img/wn/"
+                                            + result.data.current.weather[0].icon+"@4x.png").into(binding.iv)
+                                    binding.descOfWeather.text  = result.data.current.weather[0].description
+                                    binding.today.text = getCurrentTime(result.data.current.dt)
+
+                                    viewModel.insertCurrentWeather(result.data)
+                                    dailyAdapter.submitList(result.data.daily.subList(0,7))
+                                    hourlyAdapter.submitList(result.data.hourly.subList(0,24))
+                                }
+
+                                else ->{
+                                    binding.progressBar.visibility = View.GONE
+                                    Log.i("Error", "Error: ")
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
     }
 
 

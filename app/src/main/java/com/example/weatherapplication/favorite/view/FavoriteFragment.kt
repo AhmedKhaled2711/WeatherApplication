@@ -47,6 +47,7 @@ class FavoriteFragment : Fragment() , OnRemoveClickListener , AdapterFav.OnItemC
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.btnAddLocation.setOnClickListener{
             startActivity(Intent(requireContext(), MapsActivity::class.java))
         }

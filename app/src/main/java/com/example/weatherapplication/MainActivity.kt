@@ -58,6 +58,8 @@ class MainActivity : AppCompatActivity() {
         val navController = Navigation.findNavController(this, R.id.main_nav_host_fragment)
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
 
+
+
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION

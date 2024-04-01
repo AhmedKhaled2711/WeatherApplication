@@ -13,7 +13,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.weatherapplication.MainActivity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.FragmentSettingsBinding
+import com.example.weatherapplication.favorite.MapsActivity
 import com.example.weatherapplication.favorite.view.FavoriteFragmentDirections
+import com.example.weatherapplication.settings.MapsActivitySettings
 import java.util.Locale
 
 class SettingsFragment : Fragment() {
@@ -70,14 +72,23 @@ class SettingsFragment : Fragment() {
         }
 
         binding.rgLocation.setOnCheckedChangeListener { group, checkedId ->
-            val selectedLocation = when (checkedId) {
-                R.id.btn_gps -> "GPS"
-                R.id.btn_map -> "Map"
-                else -> ""
+            when (checkedId) {
+                R.id.btn_gps -> {
+                    // Handle GPS option selected
+                    val selectedLocation = "GPS"
+                    editor.putString("selectedLocation" ,selectedLocation )
+                    editor.apply()
+                    // Save selectedLocation to SharedPreferences or perform other actions
+                }
+                R.id.btn_map -> {
+                    // Handle Map option selected
+                    startActivity(Intent(requireContext(), MapsActivitySettings::class.java))
+                    binding.rgLocation.clearCheck()
+                }
             }
-            editor.putString("selectedLocation" ,selectedLocation )
-            editor.apply()
+
         }
+
 
         binding.rgWindSpeed.setOnCheckedChangeListener { group, checkedId ->
             val selectedWindSpeed = when (checkedId) {
@@ -99,4 +110,6 @@ class SettingsFragment : Fragment() {
             editor.apply()
         }
     }
+
+
 }

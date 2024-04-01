@@ -27,7 +27,11 @@
         android:id="@+id/settingsFragment"
         android:name="com.example.weatherapplication.settings.view.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <argument
+            android:name="Location"
+            app:argType="com.example.weatherapplication.model.StoreLatitudeLongitude" />
+    </fragment>
     <fragment
         android:id="@+id/alertFragment"
         android:name="com.example.weatherapplication.alarm.view.AlertFragment"
