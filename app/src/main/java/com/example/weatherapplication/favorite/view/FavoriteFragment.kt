@@ -92,18 +92,26 @@ class FavoriteFragment : Fragment() , OnRemoveClickListener , AdapterFav.OnItemC
             viewModel.favoriteLocation.collectLatest {result ->
                 when(result){
                     is StateDB.Loading ->{
-                        binding.progressBar.visibility = View.VISIBLE
+                        binding.animationView.visibility = View.VISIBLE
                         binding.favoriteRV.visibility = View.GONE
                     }
 
                     is StateDB.Success ->{
-                        binding.progressBar.visibility = View.GONE
-                        binding.favoriteRV.visibility = View.VISIBLE
-                        adapter.submitList(result.data)
+                        if (result.data.isNotEmpty()) {
+                            binding.animationView.visibility = View.GONE
+                            binding.tvAnimation.visibility = View.GONE
+                            binding.favoriteRV.visibility = View.VISIBLE
+                            adapter.submitList(result.data)
+                            binding.animationView.cancelAnimation()
+                        } else {
+                            binding.animationView.visibility = View.VISIBLE
+                            binding.tvAnimation.visibility = View.VISIBLE
+                            binding.favoriteRV.visibility = View.GONE
+                        }
                     }
 
                     else ->{
-                        binding.progressBar.visibility = View.GONE
+                        binding.animationView.visibility = View.GONE
                         Log.i("Error", "Error: ")
                     }
                 }

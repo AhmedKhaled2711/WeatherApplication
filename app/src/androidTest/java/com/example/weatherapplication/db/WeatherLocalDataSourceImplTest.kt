@@ -31,8 +31,8 @@ import org.junit.runner.RunWith
 @ExperimentalCoroutinesApi
 @MediumTest
 @RunWith(AndroidJUnit4::class)
-
 class WeatherLocalDataSourceImplTest{
+
     private lateinit var database: WeatherDataBase
     private lateinit var localDataSource: WeatherLocalDataSource
 
@@ -82,7 +82,7 @@ class WeatherLocalDataSourceImplTest{
         val newCity = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         localDataSource.insertLocationInRoom(newCity)
         val storedLocation = localDataSource.getAllStoredLocations().first()
-        MatcherAssert.assertThat(storedLocation.get(0), equalTo(newCity))
+        assertThat(storedLocation.get(0), equalTo(newCity))
     }
 
 
@@ -96,7 +96,7 @@ class WeatherLocalDataSourceImplTest{
         val newCity = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         localDataSource.insertLocationInRoom(newCity)
         val storedLocation = localDataSource.getAllStoredLocations().first()
-        MatcherAssert.assertThat(storedLocation.get(0).name, `is`("Menofia"))
+        assertThat(storedLocation.get(0).name, `is`("Menofia"))
 
     }
 

@@ -17,6 +17,7 @@ class FavoriteViewModel(private var repository: Repository)
     init {
         getLocationsFromDB()
     }
+
     fun insertFavorite(storeLatitudeLongitude: StoreLatitudeLongitude){
         viewModelScope.launch (Dispatchers.IO){
             repository.insertToFavorite(storeLatitudeLongitude)

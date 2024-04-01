@@ -13,15 +13,16 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 
 
 class RepositoryImplTest{
 
-    lateinit var weatherRemoteDataSource: WeatherRemoteDataSource
-    lateinit var weatherLocalDataSource: WeatherLocalDataSource
-    lateinit var repository: RepositoryImpl
+    private lateinit var weatherRemoteDataSource: WeatherRemoteDataSource
+    private lateinit var weatherLocalDataSource: WeatherLocalDataSource
+    private lateinit var repository: RepositoryImpl
 
     @Before
     fun setup(){
@@ -32,8 +33,16 @@ class RepositoryImplTest{
             weatherLocalDataSource
         )
     }
+
+    /**
+     * This test function tests the insertion of a location into the favorite locations database.
+     * It first creates a fake location object with latitude 31.21 and longitude 30.54, named "Menofia".
+     * Then, it inserts this fake location into the favorite locations database via the repository.
+     * After insertion, it retrieves all stored locations from the database and checks if the inserted
+     * location is present among them. It asserts that the result contains the fake location.
+     */
     @Test
-    fun insertToFavorite() = runBlockingTest {
+    fun insertToFavoriteTest() = runBlockingTest {
         val fakeLocation = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         repository.insertToFavorite(fakeLocation)
         val storedLocations = weatherLocalDataSource.getAllStoredLocations()
@@ -41,8 +50,17 @@ class RepositoryImplTest{
         assertEquals(true , result.contains(fakeLocation))
     }
 
+
+    /**
+     * This test function tests the retrieval of favorite locations from the repository.
+     * It first inserts a fake location object with latitude 31.21 and longitude 30.54, named "Menofia",
+     * into the favorite locations database via the weather local data source.
+     * Then, it retrieves the favorite locations from the repository using the `getFavoriteLocations` function.
+     * After retrieval, it checks if the inserted fake location is present among the retrieved locations.
+     * It asserts that the result contains the fake location.
+     */
     @Test
-    fun getFavoriteLocations() = runBlockingTest {
+    fun getFavoriteLocationsTest() = runBlockingTest {
         val fakeLocation = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         weatherLocalDataSource.insertLocationInRoom(fakeLocation)
 
@@ -52,8 +70,18 @@ class RepositoryImplTest{
         assertEquals(true , result.contains(fakeLocation))
     }
 
+
+    /**
+     * This test function tests the removal of a location from the favorite locations database.
+     * It first inserts a fake location object with latitude 31.21 and longitude 30.54, named "Menofia",
+     * into the favorite locations database via the weather local data source.
+     * Then, it retrieves all stored locations from the database.
+     * It asserts that the retrieved locations contain the fake location.
+     * After that, it removes the fake location from the favorite locations database via the repository.
+     * Finally, it asserts that the fake location is no longer present among the retrieved locations.
+     */
     @Test
-    fun removeFromFavorite() = runBlockingTest {
+    fun removeFromFavoriteTest() = runBlockingTest {
         val fakeLocation = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         weatherLocalDataSource.insertLocationInRoom(fakeLocation)
 
@@ -64,8 +92,16 @@ class RepositoryImplTest{
 
     }
 
+
+    /**
+     * This test function tests the retrieval of the current weather from the repository.
+     * It creates a random weather object containing various weather-related data.
+     * Then, it inserts this random weather object into the current weather database via the weather local data source.
+     * After insertion, it retrieves the current weather from the repository using the `getCurrentWeather` function.
+     * Finally, it asserts that the retrieved weather object matches the random weather object.
+     */
     @Test
-    fun getCurrentWeather() = runBlockingTest {
+    fun getCurrentWeatherTest() = runBlockingTest {
         val randomWeather = Model(
             id = 1,
             alerts = listOf(
@@ -114,8 +150,17 @@ class RepositoryImplTest{
 
     }
 
+
+    /**
+     * This test function tests the insertion of current weather into the current weather database.
+     * It creates a random weather object containing various weather-related data.
+     * Then, it inserts this random weather object into the current weather database via the repository.
+     * After insertion, it retrieves the current weather from the database using the `getCurrentWeather` function
+     * of the weather local data source.
+     * Finally, it asserts that the retrieved weather object matches the random weather object.
+     */
     @Test
-    fun insertCurrentWeather_retrievesWeather() = runBlockingTest {
+    fun insertCurrentWeatherTest() = runBlockingTest {
         val randomWeather = Model(
             id = 1,
             alerts = listOf(
@@ -163,11 +208,20 @@ class RepositoryImplTest{
 
         val storedWeather = weatherLocalDataSource.getCurrentWeather().first()
 
-        MatcherAssert.assertThat(storedWeather, equalTo(randomWeather))
+        assertThat(storedWeather, equalTo(randomWeather))
     }
 
+
+    /**
+     * This test function tests the retrieval of all saved alerts from the repository.
+     * It first inserts a fake alert notification object with a time value of 1711760033 into the
+     * notification database via the weather local data source.
+     * Then, it retrieves all saved alerts from the repository using the `getAllSavedAlerts` function.
+     * After retrieval, it checks if the inserted fake alert notification is present among the retrieved alerts.
+     * It asserts that the result contains the fake alert notification.
+     */
     @Test
-    fun getAllSavedAlerts() = runBlockingTest {
+    fun getAllSavedAlertsTest() = runBlockingTest {
         val fakeAlert = AlertNotification(1711760033)
         weatherLocalDataSource.insertNotification(fakeAlert)
         val storedNotification = repository.getAllSavedAlerts()
@@ -176,8 +230,17 @@ class RepositoryImplTest{
 
     }
 
+
+    /**
+     * This test function tests the insertion of a notification into the notification database.
+     * It creates a fake alert notification object with a time value of 1711760033.
+     * Then, it inserts this fake alert notification into the notification database via the repository.
+     * After insertion, it retrieves all saved alerts from the database using the `getAllSavedAlerts` function
+     * of the weather local data source.
+     * Finally, it asserts that the retrieved alerts contain the fake alert notification.
+     */
     @Test
-    fun insertNotification() = runBlockingTest {
+    fun insertNotificationTest() = runBlockingTest {
         val fakeAlert = AlertNotification(1711760033)
         repository.insertNotification(fakeAlert)
 
@@ -187,8 +250,18 @@ class RepositoryImplTest{
 
     }
 
+
+    /**
+     * This test function tests the deletion of a notification from the notification database.
+     * It first inserts a fake alert notification object with a time value of 1711760033 into the
+     * notification database via the weather local data source.
+     * Then, it retrieves all saved alerts from the database.
+     * It asserts that the retrieved alerts contain the fake alert notification.
+     * After that, it deletes the fake alert notification from the notification database via the repository.
+     * Finally, it asserts that the fake alert notification is no longer present among the retrieved alerts.
+     */
     @Test
-    fun deleteNotification() = runBlockingTest {
+    fun deleteNotificationTest() = runBlockingTest {
         val fakeAlert = AlertNotification(1711760033)
         weatherLocalDataSource.insertNotification(fakeAlert)
 

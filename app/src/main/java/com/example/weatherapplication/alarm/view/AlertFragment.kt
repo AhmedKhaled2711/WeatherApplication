@@ -139,13 +139,7 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
     @SuppressLint("ScheduleExactAlarm")
     private fun scheduleNotification() {
         val intent = Intent(requireContext(), Notification::class.java)
-        val title = bindingDialog.title.text.toString()
-        val message = bindingDialog.message.text.toString()
         val time = getTime()
-
-        intent.putExtra(titleExtra, title)
-        intent.putExtra(messageExtra, message)
-
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext(),
             time.toInt(),
@@ -232,31 +226,43 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
         builder.show()
     }
 
-    fun initViewModel(){
+    fun initViewModel() {
         lifecycleScope.launch {
-            viewModel.alertNotifications.collectLatest {result ->
-                when(result){
-                    is StateNotification.Loading ->{
-                        binding.progressBar2.visibility = View.VISIBLE
+            viewModel.alertNotifications.collectLatest { result ->
+                when (result) {
+                    is StateNotification.Loading -> {
+                        // Show animation while loading
+                        binding.animationView.visibility = View.VISIBLE
                         binding.NotificationRV.visibility = View.GONE
                     }
 
-                    is StateNotification.Success ->{
-                        binding.progressBar2.visibility = View.GONE
-                        binding.NotificationRV.visibility = View.VISIBLE
-                        adapter.submitList(result.data)
+                    is StateNotification.Success -> {
+                        // Hide animation if the list is not empty
+                        if (result.data.isNotEmpty()) {
+                            binding.animationView.visibility = View.GONE
+                            binding.tvAnimation.visibility = View.GONE
+                            binding.NotificationRV.visibility = View.VISIBLE
+                            adapter.submitList(result.data)
+                            binding.animationView.cancelAnimation() // Stop the animation
+                        } else {
+                            // Show animation if the list is empty
+                            binding.animationView.visibility = View.VISIBLE
+                            binding.tvAnimation.visibility = View.VISIBLE
+                            binding.NotificationRV.visibility = View.GONE
+                        }
                     }
 
-                    else ->{
-                        binding.progressBar2.visibility = View.GONE
+                    else -> {
+                        // Handle error
+                        binding.animationView.visibility = View.GONE
                         Log.i("Error", "Error: ")
                     }
                 }
-
             }
         }
-
     }
+
+
 
     private fun setUpRecyclerView(){
         var manager = LinearLayoutManager(requireContext())
@@ -268,17 +274,40 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
         binding.NotificationRV.adapter = adapter
     }
 
-    private fun cancelAlarm(alertNotification: AlertNotification){
+//    private fun cancelAlarm(alertNotification: AlertNotification){
+//
+//        val intent = Intent(requireContext(), Notification::class.java)
+//
+//
+//        val pendingIntent = PendingIntent.getBroadcast(
+//            requireContext(),
+//            alertNotification.time.toInt(),
+//            intent,
+//            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+//        )
+//
+//        val dateFormat = android.text.format.DateFormat.getLongDateFormat(context)
+//        val timeFormat = android.text.format.DateFormat.getTimeFormat(context)
+//        Log.i("alert", "cancelAlarm: ${dateFormat.format(alertNotification.time) +" "+ timeFormat.format(alertNotification.time)}")
+//        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        alarmManager.cancel(pendingIntent)
+//
+//    }
+
+    private fun cancelAlarm(alertNotification: AlertNotification) {
         val intent = Intent(requireContext(), Notification::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext(),
-            alertNotification.time.toInt(),
+            alertNotification.time.toInt(), // Assuming time is a unique identifier
             intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pendingIntent)
+        // Optionally, you can also cancel any existing notifications associated with this PendingIntent
+        val notificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(notificationID)
     }
+
 
 }

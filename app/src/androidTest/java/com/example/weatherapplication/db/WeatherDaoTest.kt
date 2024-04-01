@@ -91,6 +91,7 @@ class WeatherDaoTest {
      */
     @Test
     fun deleteLocationTest_retrievesFalse() = runBlockingTest {
+
         val newCity = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         dao.insertLocation(newCity)
         val storedLocations = dao.getAllSavedLocations().first()
