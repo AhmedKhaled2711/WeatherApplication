@@ -29,15 +29,24 @@ class Notification : BroadcastReceiver() {
 
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var sharedPreferencesLocation: SharedPreferences
+    private lateinit var sharedPreferencesCancel: SharedPreferences
     private lateinit var spNotification: SharedPreferences
     private var lon = 0.0
     private var lat = 0.0
     private lateinit var selectedNotification: String
+    private lateinit var cancelNotification: String
     override fun onReceive(context: Context, intent: Intent) {
         spNotification = context.getSharedPreferences("settings" , Context.MODE_PRIVATE)
         selectedNotification = spNotification.getString("selectedNotification" , "" ).toString()
-        Log.i("sp", "$selectedNotification ")
-        if (selectedNotification == "enable")
+        sharedPreferencesCancel = context.getSharedPreferences("ALert" , Context.MODE_PRIVATE)
+        cancelNotification = sharedPreferencesCancel.getString("cancelAlarm" , "" ).toString()
+        if (selectedNotification == "disable" ) {
+            //notification is disable
+        }
+        else if (cancelNotification == "cancel"){
+            //notification is cancel
+        }
+        else
         {
             playSong(context)
             CoroutineScope(Dispatchers.IO).launch {
@@ -68,10 +77,6 @@ class Notification : BroadcastReceiver() {
 
                 manager.notify(notificationID, notification)
             }
-        }
-        else
-        {
-            // Notification off
         }
 
 

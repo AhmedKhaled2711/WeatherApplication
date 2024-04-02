@@ -41,7 +41,7 @@ class FavoriteViewModelTest{
      * that the first location's name matches "Menofia".
      */
     @Test
-     fun insertFavoriteTest() = runBlockingTest{
+     fun insertFavorite_objectOfCity_unit() = runBlockingTest{
 
         val newCity = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         viewModel.insertFavorite(newCity)
@@ -68,7 +68,7 @@ class FavoriteViewModelTest{
      * the list is not null.
      */
     @Test
-    fun getLocationsFromDBTest() = runBlockingTest {
+    fun getLocationsFromDB_retrievesLocations() = runBlockingTest {
 
         val newCity = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         viewModel.insertFavorite(newCity)
@@ -100,7 +100,7 @@ class FavoriteViewModelTest{
      * Finally, it asserts that the deleted city is no longer present in the list of favorite locations.
      */
     @Test
-    fun deleteLocationTest() = runBlockingTest {
+    fun deleteLocation_objectOfCity_unit() = runBlockingTest {
 
         val newCity = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         viewModel.insertFavorite(newCity)

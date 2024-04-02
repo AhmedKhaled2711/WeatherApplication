@@ -42,7 +42,7 @@ class RepositoryImplTest{
      * location is present among them. It asserts that the result contains the fake location.
      */
     @Test
-    fun insertToFavoriteTest() = runBlockingTest {
+    fun insertToFavorite_objectOfCity_unit() = runBlockingTest {
         val fakeLocation = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         repository.insertToFavorite(fakeLocation)
         val storedLocations = weatherLocalDataSource.getAllStoredLocations()
@@ -60,7 +60,7 @@ class RepositoryImplTest{
      * It asserts that the result contains the fake location.
      */
     @Test
-    fun getFavoriteLocationsTest() = runBlockingTest {
+    fun getFavoriteLocations_retrievesLocations() = runBlockingTest {
         val fakeLocation = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         weatherLocalDataSource.insertLocationInRoom(fakeLocation)
 
@@ -81,7 +81,7 @@ class RepositoryImplTest{
      * Finally, it asserts that the fake location is no longer present among the retrieved locations.
      */
     @Test
-    fun removeFromFavoriteTest() = runBlockingTest {
+    fun removeFromFavorite_objectOfCity_unit() = runBlockingTest {
         val fakeLocation = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         weatherLocalDataSource.insertLocationInRoom(fakeLocation)
 
@@ -101,7 +101,7 @@ class RepositoryImplTest{
      * Finally, it asserts that the retrieved weather object matches the random weather object.
      */
     @Test
-    fun getCurrentWeatherTest() = runBlockingTest {
+    fun getCurrentWeather_retrievesWeather() = runBlockingTest {
         val randomWeather = Model(
             id = 1,
             alerts = listOf(
@@ -160,7 +160,7 @@ class RepositoryImplTest{
      * Finally, it asserts that the retrieved weather object matches the random weather object.
      */
     @Test
-    fun insertCurrentWeatherTest() = runBlockingTest {
+    fun insertCurrentWeather_objectOfWeather_unit() = runBlockingTest {
         val randomWeather = Model(
             id = 1,
             alerts = listOf(
@@ -221,7 +221,7 @@ class RepositoryImplTest{
      * It asserts that the result contains the fake alert notification.
      */
     @Test
-    fun getAllSavedAlertsTest() = runBlockingTest {
+    fun getAllSavedAlerts_retrievesAlerts() = runBlockingTest {
         val fakeAlert = AlertNotification(1711760033)
         weatherLocalDataSource.insertNotification(fakeAlert)
         val storedNotification = repository.getAllSavedAlerts()
@@ -240,7 +240,7 @@ class RepositoryImplTest{
      * Finally, it asserts that the retrieved alerts contain the fake alert notification.
      */
     @Test
-    fun insertNotificationTest() = runBlockingTest {
+    fun insertNotificationTest_objectOfNotification_unit() = runBlockingTest {
         val fakeAlert = AlertNotification(1711760033)
         repository.insertNotification(fakeAlert)
 
@@ -261,7 +261,7 @@ class RepositoryImplTest{
      * Finally, it asserts that the fake alert notification is no longer present among the retrieved alerts.
      */
     @Test
-    fun deleteNotificationTest() = runBlockingTest {
+    fun deleteNotification_objectOfNotification_unit() = runBlockingTest {
         val fakeAlert = AlertNotification(1711760033)
         weatherLocalDataSource.insertNotification(fakeAlert)
 

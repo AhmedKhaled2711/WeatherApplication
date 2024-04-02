@@ -60,7 +60,7 @@ class WeatherDaoTest {
      * location matches the inserted one.
      */
     @Test
-    fun getAllSavedLocationsTest_retrievesLocations() = runBlockingTest {
+    fun getAllSavedLocations_retrievesLocations() = runBlockingTest {
         val newCity = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         dao.insertLocation(newCity)
         val storedLocation = dao.getAllSavedLocations().first()
@@ -74,7 +74,7 @@ class WeatherDaoTest {
      * of the retrieved location matches the name of the inserted city.
      */
     @Test
-    fun insertLocationTest_retrievesLocations() = runBlockingTest {
+    fun insertLocation_objectOfCity_unit() = runBlockingTest {
         val newCity = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         dao.insertLocation(newCity)
         val storedLocation = dao.getAllSavedLocations().first()
@@ -90,7 +90,7 @@ class WeatherDaoTest {
      * longer contain the deleted city.
      */
     @Test
-    fun deleteLocationTest_retrievesFalse() = runBlockingTest {
+    fun deleteLocation_objectOfCity_unit() = runBlockingTest {
 
         val newCity = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         dao.insertLocation(newCity)
@@ -107,7 +107,7 @@ class WeatherDaoTest {
      * that it matches the inserted weather model.
      */
     @Test
-    fun getCurrentWeather_retrievesWeather() = runBlockingTest{
+    fun getCurrentWeather_retrievesListOfWeather() = runBlockingTest{
         val randomWeather = Model(
             id = 1,
             alerts = listOf(
@@ -162,7 +162,7 @@ class WeatherDaoTest {
      * that it matches the inserted weather model.
      */
     @Test
-    fun insertCurrentWeather_retrievesWeather() = runBlockingTest {
+    fun insertCurrentWeather_objectOfWeather_unit() = runBlockingTest {
         val randomWeather = Model(
             id = 1,
             alerts = listOf(

@@ -43,7 +43,7 @@ class AlertsViewModelTest{
      * asserts that the first notification's time matches the expected value.
      */
     @Test
-    fun insertAlertsTest() = runBlockingTest{
+    fun insertAlerts_objectOfAlert_unit() = runBlockingTest{
 
         val newAlert = AlertNotification(12547834)
         viewModel.insertAlerts(newAlert)
@@ -69,7 +69,7 @@ class AlertsViewModelTest{
      * asserts that the list is not null.
      */
     @Test
-    fun getAlertsTest() = runBlockingTest {
+    fun getAlerts_retrievesAlerts() = runBlockingTest {
 
         viewModel.getAlerts()
 
@@ -98,7 +98,7 @@ class AlertsViewModelTest{
      * of alert notifications.
      */
     @Test
-    fun deleteLocationTest() = runBlockingTest {
+    fun deleteAlert_objectOfAlert_unit() = runBlockingTest {
 
         val newAlert = AlertNotification(12547834)
         viewModel.insertAlerts(newAlert)

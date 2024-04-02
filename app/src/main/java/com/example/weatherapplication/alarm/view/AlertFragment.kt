@@ -8,6 +8,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -49,16 +50,17 @@ import com.example.weatherapplication.remoteDataSource.WeatherRemoteDataSourceIm
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Calendar
-import java.util.Date
 
 class AlertFragment : Fragment() , OnRemoveClickListener{
 
     private lateinit var binding: FragmentAlertBinding
-    lateinit var bindingDialog : NotificationLayoutBinding
+    private lateinit var bindingDialog : NotificationLayoutBinding
     private lateinit var dialog: Dialog
     private lateinit var adapter: AdapterAlerts
     private lateinit var viewModel : AlertsViewModel
-
+    private lateinit var spAlert: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+    private val pendingIntents = mutableListOf<PendingIntent>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -88,6 +90,9 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
         setUpRecyclerView()
         initViewModel()
 
+        spAlert = requireActivity().getSharedPreferences("ALert" , Context.MODE_PRIVATE)
+        editor = spAlert.edit()
+
     }
 
     private fun initDialog() {
@@ -103,13 +108,10 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
         )
         dialog.setCancelable(false)
 
-        // Find OK and Cancel buttons in your layout
         val okButton = dialog.findViewById<Button>(R.id.btn_submit)
         val cancelButton = dialog.findViewById<Button>(R.id.btn_cancel)
 
-        // Set click listeners for OK and Cancel buttons
         okButton.setOnClickListener {
-            // Handle OK button click
             if (checkNotificationPermissions(requireContext())) {
                 scheduleNotification()
 
@@ -117,14 +119,11 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
             val time = getTime()
             viewModel.insertAlerts(AlertNotification(time))
             dialog.dismiss()
-             // Dismiss the dialog when OK is clicked
-            // Add any additional logic you want to execute when OK is clicked
+
         }
 
         cancelButton.setOnClickListener {
-            // Handle Cancel button click
-            dialog.dismiss() // Dismiss the dialog when Cancel is clicked
-            // Add any additional logic you want to execute when Cancel is clicked
+            dialog.dismiss()
         }
 
         dialog.show()
@@ -132,14 +131,18 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
 
     @SuppressLint("ScheduleExactAlarm")
     private fun scheduleNotification() {
+
         val intent = Intent(requireContext(), Notification::class.java)
         val time = getTime()
+
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext(),
             time.toInt(),
             intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+        // Store the PendingIntent in the list
+        pendingIntents.add(pendingIntent)
 
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -148,6 +151,8 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
             time,
             pendingIntent
         )
+        editor.putString("cancelAlarm" ,"play" )
+        editor.apply()
 
     }
 
@@ -256,8 +261,6 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
         }
     }
 
-
-
     private fun setUpRecyclerView(){
         var manager = LinearLayoutManager(requireContext())
         manager.orientation = RecyclerView.VERTICAL
@@ -268,39 +271,28 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
         binding.NotificationRV.adapter = adapter
     }
 
-//    private fun cancelAlarm(alertNotification: AlertNotification){
-//
-//        val intent = Intent(requireContext(), Notification::class.java)
-//
-//
-//        val pendingIntent = PendingIntent.getBroadcast(
-//            requireContext(),
-//            alertNotification.time.toInt(),
-//            intent,
-//            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
-//        )
-//
-//        val dateFormat = android.text.format.DateFormat.getLongDateFormat(context)
-//        val timeFormat = android.text.format.DateFormat.getTimeFormat(context)
-//        Log.i("alert", "cancelAlarm: ${dateFormat.format(alertNotification.time) +" "+ timeFormat.format(alertNotification.time)}")
-//        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        alarmManager.cancel(pendingIntent)
-//
-//    }
-
     private fun cancelAlarm(alertNotification: AlertNotification) {
-        val intent = Intent(requireContext(), Notification::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            requireContext(),
-            alertNotification.time.toInt(), // Assuming time is a unique identifier
-            intent,
-            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.cancel(pendingIntent)
-        // Optionally, you can also cancel any existing notifications associated with this PendingIntent
-        val notificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancel(alertNotification.time.toInt())
+
+        editor.putString("cancelAlarm" ,"cancel" )
+        editor.apply()
+
+        val pendingIntent = pendingIntents.find {
+            PendingIntent.getBroadcast(
+                requireContext(),
+                alertNotification.time.toInt(),
+                Intent(requireContext(), Notification::class.java),
+                PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+            ) == it
+        }
+
+        pendingIntent?.let {
+            // If PendingIntent is found, cancel the alarm
+            val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.cancel(it)
+
+            // Remove the PendingIntent from the list
+            pendingIntents.remove(it)
+        }
     }
 
 

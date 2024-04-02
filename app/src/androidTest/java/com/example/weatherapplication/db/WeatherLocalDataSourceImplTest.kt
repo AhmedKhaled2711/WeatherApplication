@@ -62,7 +62,7 @@ class WeatherLocalDataSourceImplTest{
      * deletes the new location, and verifies that it no longer exists in the stored locations.
      */
     @Test
-    fun deleteLocationInRoomTest() = runBlockingTest {
+    fun deleteLocationInRoom_objectOfCity_unit() = runBlockingTest {
         val newCity = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         localDataSource.insertLocationInRoom(newCity)
         val storedLocations = localDataSource.getAllStoredLocations().first()
@@ -92,7 +92,7 @@ class WeatherLocalDataSourceImplTest{
      * location exists among them, specifically verifying if the name matches the expected value.
      */
     @Test
-    fun insertLocationInRoomTest_retrievesLocations() = runBlockingTest {
+    fun insertLocationInRoom_objectOfCity_unit() = runBlockingTest {
         val newCity = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
         localDataSource.insertLocationInRoom(newCity)
         val storedLocation = localDataSource.getAllStoredLocations().first()
@@ -107,7 +107,7 @@ class WeatherLocalDataSourceImplTest{
      * the inserted data.
      */
     @Test
-    fun insertCurrentWeather_retrievesWeather() = runBlockingTest {
+    fun insertCurrentWeather_objectOfWeather_unit() = runBlockingTest {
         val randomWeather = Model(
             id = 1,
             alerts = listOf(
@@ -164,7 +164,7 @@ class WeatherLocalDataSourceImplTest{
      * to check if it matches the inserted data.
      */
     @Test
-    fun getCurrentWeather_retrievesWeather() = runBlockingTest{
+    fun getCurrentWeather_retrievesListOfWeather() = runBlockingTest{
         val randomWeather = Model(
             id = 1,
             alerts = listOf(

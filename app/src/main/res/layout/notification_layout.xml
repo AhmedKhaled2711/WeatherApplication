@@ -63,7 +63,9 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_margin="5dp"
+            android:textColor="@color/white"
             android:layout_weight="1"
+            android:backgroundTint="#11235A"
             android:text="@string/okay" />
 
         <Button
@@ -73,6 +75,8 @@
             android:layout_weight="1"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:textColor="@color/white"
+            android:backgroundTint="#11235A"
             android:layout_margin="5dp"
             android:layout_gravity="center"
             android:text="@string/cancel" />

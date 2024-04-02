@@ -29,7 +29,6 @@
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Circular"
         android:backgroundTint="#201658"
         app:srcCompat="@drawable/ic_add"
-        android:tintMode="add"
         android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
