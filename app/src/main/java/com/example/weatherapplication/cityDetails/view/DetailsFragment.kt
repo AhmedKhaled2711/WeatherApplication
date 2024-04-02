@@ -73,6 +73,7 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         location = args.locationDetails
+
         binding.ivBack.setOnClickListener {
             val action = DetailsFragmentDirections.actionDetailsFragmentToFavoriteFragment()
             findNavController().navigate(action)
@@ -126,11 +127,12 @@ class DetailsFragment : Fragment() {
         val remoteFactory = CityViewModelFactory(repository)
         viewModel = ViewModelProvider(this, remoteFactory)[CityViewModel::class.java]
 
+
         lifecycleScope.launch {
             if (isNetworkConnected(requireContext())) {
                 Toast.makeText(requireContext() , "Data from Network", Toast.LENGTH_SHORT).show()
 
-                viewModel.getWeatherDetails(lat , lon , getMeasurementSystem(selectedUnit),selectedLanguage )
+                viewModel.getWeatherDetails(location.latitude , location.longitude , getMeasurementSystem(selectedUnit),selectedLanguage )
                 lifecycleScope.launch {
                     viewModel.weatherDetails.collectLatest { result ->
                         when(result){
