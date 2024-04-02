@@ -49,8 +49,8 @@ import kotlin.math.log
 
 class HomeFragment : Fragment() {
 
-    private var lon = 0.0
-    private var lat = 0.0
+    private var lon = 30.9782
+    private var lat = 30.2945
     private var lonMap = 0.0
     private var latMap = 0.0
     private lateinit var selectedUnit: String
@@ -87,15 +87,15 @@ class HomeFragment : Fragment() {
 
         //GPS
         sharedPreferencesLocation = requireActivity().getSharedPreferences("locationKey" , Context.MODE_PRIVATE)
-        lon = sharedPreferencesLocation.getString("longitude" , "0")!!.toDouble()
-        lat = sharedPreferencesLocation.getString("latitude" , "0")!!.toDouble()
+        lon = sharedPreferencesLocation.getString("longitude" , "30.9782")!!.toDouble()
+        lat = sharedPreferencesLocation.getString("latitude" , "30.2945")!!.toDouble()
 
         spSettings= requireActivity().getSharedPreferences("settings" , Context.MODE_PRIVATE)
         selectedUnit = spSettings.getString("selectedUnit" , "" ).toString()
         Log.i("sp", "$selectedUnit ")
         selectedLanguage = spSettings.getString("selectedLanguage" , "" ).toString()
         Log.i("sp", "$selectedLanguage ")
-        selectedLocation = spSettings.getString("selectedLocation" , "" ).toString()
+        selectedLocation = spSettings.getString("selectedLocation" , "GPS" ).toString()
         Log.i("sp", "$selectedLocation ")
         selectedWindSpeed = spSettings.getString("selectedWindSpeed" , "" ).toString()
         Log.i("sp", "$selectedWindSpeed ")

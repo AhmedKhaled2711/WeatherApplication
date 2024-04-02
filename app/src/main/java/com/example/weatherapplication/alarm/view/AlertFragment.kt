@@ -141,7 +141,7 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        // Store the PendingIntent in the list
+
         pendingIntents.add(pendingIntent)
 
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager

@@ -84,7 +84,7 @@ class Notification : BroadcastReceiver() {
     }
 
     private fun playSong(context: Context) {
-        mediaPlayer = MediaPlayer.create(context, R.raw.relax)
+        mediaPlayer = MediaPlayer.create(context, R.raw.alarm_sound)
         mediaPlayer?.start()
     }
 

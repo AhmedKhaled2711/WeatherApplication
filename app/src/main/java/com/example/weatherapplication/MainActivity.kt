@@ -32,7 +32,7 @@ import java.util.Locale
 class MainActivity : AppCompatActivity() {
 
     val locationRequestID = 1000
-    private lateinit var selectedLanguage: String
+    private lateinit var selectedLocation: String
     private lateinit var spSettings: SharedPreferences
     private lateinit var locationCallback : LocationCallback
     private lateinit var locationProviderClient: FusedLocationProviderClient
@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
 
 //        spSettings= this.getSharedPreferences("settings" , Context.MODE_PRIVATE)
 //        selectedLanguage = spSettings.getString("selectedLanguage" , "" ).toString()
@@ -114,6 +115,7 @@ class MainActivity : AppCompatActivity() {
                 Log.i("TAG", locationResult.toString())
                 // Toast.makeText(this@MainActivity ,locationResult.toString() , Toast.LENGTH_LONG ).show()
                 editor.putString("longitude" , locationResult.lastLocation?.longitude.toString())
+                editor.apply()
                 editor.putString("latitude",locationResult.lastLocation?.latitude.toString())
                 editor.apply()
 
