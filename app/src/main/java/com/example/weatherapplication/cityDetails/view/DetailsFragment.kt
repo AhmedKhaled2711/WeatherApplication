@@ -148,6 +148,7 @@ class DetailsFragment : Fragment() {
                                 binding.weeklyRV.visibility = View.VISIBLE
                                 binding.homeConstraint.visibility = View.VISIBLE
                                 binding.newConstraint.visibility =View.VISIBLE
+                                TemperatureDegree(selectedUnit)
                                 binding.temperature.text = result.data.current.temp.toString()
                                 binding.pressureEdit.text = result.data.current.pressure.toString()
                                 binding.humidityEdit.text = result.data.current.humidity.toString()
@@ -186,6 +187,14 @@ class DetailsFragment : Fragment() {
             }
 
         }
+    }
+    fun TemperatureDegree( unit : String) : String{
+        when(unit){
+            "Fahrenheit" ->  binding.MeasurementTemperatureDegree.text = "F"
+            "Celsius" -> binding.MeasurementTemperatureDegree.text = "C"
+            else -> binding.MeasurementTemperatureDegree.text = "K"
+        }
+        return unit
     }
 }
 

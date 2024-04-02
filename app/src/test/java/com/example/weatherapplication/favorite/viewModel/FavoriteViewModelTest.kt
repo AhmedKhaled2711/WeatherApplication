@@ -70,6 +70,10 @@ class FavoriteViewModelTest{
     @Test
     fun getLocationsFromDBTest() = runBlockingTest {
 
+        val newCity = StoreLatitudeLongitude(31.21 , 30.54 ,"Menofia" )
+        viewModel.insertFavorite(newCity)
+
+
         viewModel.getLocationsFromDB()
 
         var value = emptyList<StoreLatitudeLongitude>()

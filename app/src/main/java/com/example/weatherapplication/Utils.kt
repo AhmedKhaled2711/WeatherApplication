@@ -15,8 +15,7 @@ import java.util.Locale
 // Constants for notification
 const val notificationID = 121
 const val channelID = "channel1"
-const val titleExtra = "titleExtra"
-const val messageExtra = "messageExtra"
+
 
 fun getCurrentTime(dt : Long) : String{
     val data = Date(dt * 1000)
@@ -58,21 +57,6 @@ sealed class StateRemote{
 
 }
 
-//fun getAddressEnglish(context: Context, lat: Double?, lon: Double?):String{
-//    var address:MutableList<Address>?
-//    val geocoder= Geocoder(context)
-//    address =geocoder.getFromLocation(lat?:0.0,lon?:0.0,1)
-//    if (address?.isEmpty()==true) {
-//        return "Unkown location"
-//    } else if (address?.get(0)?.countryName.isNullOrEmpty()) {
-//        return "Unkown Country"
-//    } else if (address?.get(0)?.adminArea.isNullOrEmpty()) {
-//        return address?.get(0)?.countryName.toString()
-//    } else{
-//        return address?.get(0)?.countryName.toString()+", "+address?.get(0)?.adminArea+", "+address?.get(0)?.locality
-//    }
-//}
-
 fun getAddressEnglish(context: Context, lat: Double?, lon: Double?): String {
     val geocoder = Geocoder(context)
     val addressList: MutableList<Address>? = geocoder.getFromLocation(lat ?: 0.0, lon ?: 0.0, 1)
@@ -110,4 +94,6 @@ fun getMeasurementSystem(input: String): String {
         else -> ""
     }
 }
+
+
 

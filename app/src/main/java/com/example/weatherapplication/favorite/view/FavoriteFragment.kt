@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.weatherapplication.R
 import com.example.weatherapplication.favorite.MapsActivity
 import com.example.weatherapplication.StateDB
 import com.example.weatherapplication.databinding.FragmentFavoriteBinding
@@ -58,14 +59,14 @@ class FavoriteFragment : Fragment() , OnRemoveClickListener , AdapterFav.OnItemC
 
     override fun onRemoveClick(location: StoreLatitudeLongitude) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Confirm Deletion")
-        builder.setMessage("Are you sure you want to remove this city?")
-        builder.setPositiveButton("Yes") { _, _ ->
+        builder.setTitle(R.string.confirm_deletion)
+        builder.setMessage(R.string.remove_city_confirmation)
+        builder.setPositiveButton(R.string.yes) { _, _ ->
             viewModel.deleteLocation(location)
             Toast.makeText(requireContext(), "City removed", Toast.LENGTH_LONG).show()
         }
-        builder.setNegativeButton("No") { _, _ ->
-            Toast.makeText(requireContext(), "Deletion cancelled", Toast.LENGTH_LONG).show()
+        builder.setNegativeButton(R.string.no) { _, _ ->
+            Toast.makeText(requireContext(), R.string.deletion_cancelled, Toast.LENGTH_LONG).show()
         }
         builder.show()
     }

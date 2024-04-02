@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">تطبيق الطقس</string>
+    <string name="app_name">الطقس</string>
     <string name="hello_blank_fragment">مرحبًا بالقطعة الفارغة</string>
     <string name="title_activity_maps">نشاط الخرائط</string>
     <string name="temperature">درجة الحرارة</string>
@@ -25,5 +25,22 @@
     <string name="cloud">السحب</string>
     <string name="ultra_violet">الأشعة فوق البنفسجية</string>
     <string name="visibility">الرؤية</string>
+    <string name="home">الصفحة الرئيسية</string>
+    <string name="alert">تنبيه</string>
+    <string name="settings">الإعدادات</string>
+    <string name="favorite">المفضلة</string>
+    <string name="nothing_to_see_here"> لا يوجد شيء للرؤية هنا!</string>
+    <string name="okay">حسناً</string>
+    <string name="cancel">إلغاء</string>
+    <string name="title_activity_maps_settings">إعدادات نشاط الخرائط</string>
+    <string name="confirm_deletion">تأكيد الحذف</string>
+    <string name="confirm_message">هل أنت متأكد أنك تريد إزالة هذا التنبيه؟</string>
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
+    <string name="alert_removed">تمت إزالة التنبيه</string>
+    <string name="deletion_cancelled">تم إلغاء الحذف</string>
+    <string name="city_removed">تمت إزالة المدينة</string>
+    <string name="remove_city_confirmation">هل أنت متأكد أنك تريد إزالة هذه المدينة؟</string>
+
 </resources>
 

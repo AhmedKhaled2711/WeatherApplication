@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.example.weatherapplication.databinding.DailyCardBinding
 import com.example.weatherapplication.getDay
 import com.example.weatherapplication.model.Daily
-import kotlin.time.Duration.Companion.days
 
 class DailyAdapter(private var context: Context) :
     ListAdapter <Daily, DailyAdapter.MyViewHolder> (DailyDiffUtil()){

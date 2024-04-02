@@ -128,7 +128,7 @@ class HomeFragment : Fragment() {
                         viewModel.weatherDetails.collectLatest { result ->
                             when(result){
                                 is StateRemote.Loading ->{
-                                    binding.progressBar.visibility = View.VISIBLE
+                                    binding.progressBarHome.visibility = View.VISIBLE
                                     binding.DailyRv.visibility = View.GONE
                                     binding.weeklyRV.visibility = View.GONE
                                     binding.homeConstraint.visibility = View.GONE
@@ -136,7 +136,7 @@ class HomeFragment : Fragment() {
                                 }
 
                                 is StateRemote.Success ->{
-                                    binding.progressBar.visibility = View.GONE
+                                    binding.progressBarHome.visibility = View.GONE
                                     binding.DailyRv.visibility = View.VISIBLE
                                     binding.weeklyRV.visibility = View.VISIBLE
                                     binding.homeConstraint.visibility = View.VISIBLE
@@ -161,7 +161,7 @@ class HomeFragment : Fragment() {
                                 }
 
                                 else ->{
-                                    binding.progressBar.visibility = View.GONE
+                                    binding.progressBarHome.visibility = View.GONE
                                     Log.i("Error", "Error: ")
                                 }
                             }
@@ -174,7 +174,7 @@ class HomeFragment : Fragment() {
                         viewModel.weatherDetailsDB.collectLatest { result ->
                             when(result){
                                 is StateRemote.Loading ->{
-                                    binding.progressBar.visibility = View.VISIBLE
+                                    binding.progressBarHome.visibility = View.VISIBLE
                                     binding.DailyRv.visibility = View.GONE
                                     binding.weeklyRV.visibility = View.GONE
                                     binding.homeConstraint.visibility = View.GONE
@@ -182,7 +182,7 @@ class HomeFragment : Fragment() {
                                 }
 
                                 is StateRemote.Success ->{
-                                    binding.progressBar.visibility = View.GONE
+                                    binding.progressBarHome.visibility = View.GONE
                                     binding.DailyRv.visibility = View.VISIBLE
                                     binding.weeklyRV.visibility = View.VISIBLE
                                     binding.homeConstraint.visibility = View.VISIBLE
@@ -201,13 +201,13 @@ class HomeFragment : Fragment() {
                                     binding.descOfWeather.text  = result.data.current.weather[0].description
                                     binding.today.text = getCurrentTime(result.data.current.dt)
 
-                                    viewModel.insertCurrentWeather(result.data)
+                                    //viewModel.insertCurrentWeather(result.data)
                                     dailyAdapter.submitList(result.data.daily.subList(0,7))
                                     hourlyAdapter.submitList(result.data.hourly.subList(0,24))
                                 }
 
                                 else ->{
-                                    binding.progressBar.visibility = View.GONE
+                                    binding.progressBarHome.visibility = View.GONE
                                     Log.i("Error", "Error: ")
                                 }
                             }
@@ -218,6 +218,7 @@ class HomeFragment : Fragment() {
             }
         }
         else{
+            //Map
             lifecycleScope.launch {
                 if (isNetworkConnected(requireContext())) {
                     Toast.makeText(requireContext() , "Data from Network", Toast.LENGTH_SHORT).show()
@@ -227,7 +228,7 @@ class HomeFragment : Fragment() {
                         viewModel.weatherDetails.collectLatest { result ->
                             when(result){
                                 is StateRemote.Loading ->{
-                                    binding.progressBar.visibility = View.VISIBLE
+                                    binding.progressBarHome.visibility = View.VISIBLE
                                     binding.DailyRv.visibility = View.GONE
                                     binding.weeklyRV.visibility = View.GONE
                                     binding.homeConstraint.visibility = View.GONE
@@ -235,7 +236,7 @@ class HomeFragment : Fragment() {
                                 }
 
                                 is StateRemote.Success ->{
-                                    binding.progressBar.visibility = View.GONE
+                                    binding.progressBarHome.visibility = View.GONE
                                     binding.DailyRv.visibility = View.VISIBLE
                                     binding.weeklyRV.visibility = View.VISIBLE
                                     binding.homeConstraint.visibility = View.VISIBLE
@@ -260,7 +261,7 @@ class HomeFragment : Fragment() {
                                 }
 
                                 else ->{
-                                    binding.progressBar.visibility = View.GONE
+                                    binding.progressBarHome.visibility = View.GONE
                                     Log.i("Error", "Error: ")
                                 }
                             }
@@ -273,7 +274,7 @@ class HomeFragment : Fragment() {
                         viewModel.weatherDetailsDB.collectLatest { result ->
                             when(result){
                                 is StateRemote.Loading ->{
-                                    binding.progressBar.visibility = View.VISIBLE
+                                    binding.progressBarHome.visibility = View.VISIBLE
                                     binding.DailyRv.visibility = View.GONE
                                     binding.weeklyRV.visibility = View.GONE
                                     binding.homeConstraint.visibility = View.GONE
@@ -281,11 +282,12 @@ class HomeFragment : Fragment() {
                                 }
 
                                 is StateRemote.Success ->{
-                                    binding.progressBar.visibility = View.GONE
+                                    binding.progressBarHome.visibility = View.GONE
                                     binding.DailyRv.visibility = View.VISIBLE
                                     binding.weeklyRV.visibility = View.VISIBLE
                                     binding.homeConstraint.visibility = View.VISIBLE
                                     binding.newConstraint.visibility =View.VISIBLE
+                                    TemperatureDegree(selectedUnit)
                                     binding.temperature.text = result.data.current.temp.toString()
                                     binding.pressureEdit.text = result.data.current.pressure.toString()
                                     binding.humidityEdit.text = result.data.current.humidity.toString()
@@ -300,13 +302,12 @@ class HomeFragment : Fragment() {
                                     binding.descOfWeather.text  = result.data.current.weather[0].description
                                     binding.today.text = getCurrentTime(result.data.current.dt)
 
-                                    viewModel.insertCurrentWeather(result.data)
                                     dailyAdapter.submitList(result.data.daily.subList(0,7))
                                     hourlyAdapter.submitList(result.data.hourly.subList(0,24))
                                 }
 
                                 else ->{
-                                    binding.progressBar.visibility = View.GONE
+                                    binding.progressBarHome.visibility = View.GONE
                                     Log.i("Error", "Error: ")
                                 }
                             }
@@ -318,8 +319,6 @@ class HomeFragment : Fragment() {
         }
 
     }
-
-
 
     private fun setUpDailyRV(){
         daillyLayoutManager = LinearLayoutManager(requireContext(),

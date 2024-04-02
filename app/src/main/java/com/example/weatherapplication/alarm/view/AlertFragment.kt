@@ -41,17 +41,11 @@ import com.example.weatherapplication.databinding.FragmentAlertBinding
 import com.example.weatherapplication.databinding.NotificationLayoutBinding
 import com.example.weatherapplication.db.WeatherLocalDataSource
 import com.example.weatherapplication.db.WeatherLocalDataSourceImpl
-import com.example.weatherapplication.favorite.recyclerView.AdapterFav
-import com.example.weatherapplication.favorite.viewModel.FavoriteViewModel
-import com.example.weatherapplication.favorite.viewModel.FavoriteViewModelFactory
-import com.example.weatherapplication.messageExtra
 import com.example.weatherapplication.model.AlertNotification
 import com.example.weatherapplication.model.Repository
 import com.example.weatherapplication.model.RepositoryImpl
-import com.example.weatherapplication.notificationID
 import com.example.weatherapplication.remoteDataSource.WeatherRemoteDataSource
 import com.example.weatherapplication.remoteDataSource.WeatherRemoteDataSourceImpl
-import com.example.weatherapplication.titleExtra
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -213,15 +207,15 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
 
     override fun onRemoveClick(alertNotification: AlertNotification) {
         val builder = android.app.AlertDialog.Builder(requireContext())
-        builder.setTitle("Confirm Deletion")
-        builder.setMessage("Are you sure you want to remove this  alert?")
-        builder.setPositiveButton("Yes") { _, _ ->
+        builder.setTitle(R.string.confirm_deletion)
+        builder.setMessage(R.string.confirm_message)
+        builder.setPositiveButton(R.string.yes) { _, _ ->
             cancelAlarm(alertNotification)
             viewModel.deleteAlert(alertNotification)
-            Toast.makeText(requireContext(), "Alert removed", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), R.string.alert_removed, Toast.LENGTH_LONG).show()
         }
-        builder.setNegativeButton("No") { _, _ ->
-            Toast.makeText(requireContext(), "Deletion cancelled", Toast.LENGTH_LONG).show()
+        builder.setNegativeButton(R.string.no) { _, _ ->
+            Toast.makeText(requireContext(), R.string.deletion_cancelled, Toast.LENGTH_LONG).show()
         }
         builder.show()
     }
@@ -306,7 +300,7 @@ class AlertFragment : Fragment() , OnRemoveClickListener{
         alarmManager.cancel(pendingIntent)
         // Optionally, you can also cancel any existing notifications associated with this PendingIntent
         val notificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancel(notificationID)
+        notificationManager.cancel(alertNotification.time.toInt())
     }
 
 
