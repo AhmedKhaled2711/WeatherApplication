@@ -14,7 +14,7 @@ interface WeatherService {
                                   @Query("units") units: String,
                                   @Query("lang") language: String,
                                   @Query("exclude") exclude:String = "minutely",
-                                  @Query("appid") apiKey: String = "30a73a92f374a05cbcd5f6b8caeacab0",
+                                  @Query("appid") apiKey: String = "Call A.Khaled for Key",
 
     )
     : Model
