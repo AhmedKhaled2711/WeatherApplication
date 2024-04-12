@@ -49,8 +49,8 @@ import kotlin.math.log
 
 class HomeFragment : Fragment() {
 
-    private var lon = 30.9782
-    private var lat = 30.2945
+    private var lon = 0.0
+    private var lat = 0.0
     private var lonMap = 0.0
     private var latMap = 0.0
     private lateinit var selectedUnit: String
@@ -95,7 +95,7 @@ class HomeFragment : Fragment() {
         Log.i("sp", "$selectedUnit ")
         selectedLanguage = spSettings.getString("selectedLanguage" , "" ).toString()
         Log.i("sp", "$selectedLanguage ")
-        selectedLocation = spSettings.getString("selectedLocation" , "GPS" ).toString()
+        selectedLocation = spSettings.getString("selectedLocation" , "" ).toString()
         Log.i("sp", "$selectedLocation ")
         selectedWindSpeed = spSettings.getString("selectedWindSpeed" , "" ).toString()
         Log.i("sp", "$selectedWindSpeed ")

@@ -1,5 +1,6 @@
 package com.example.weatherapplication.alarm
 
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -36,58 +37,61 @@ class Notification : BroadcastReceiver() {
     private lateinit var selectedNotification: String
     private lateinit var cancelNotification: String
     override fun onReceive(context: Context, intent: Intent) {
-        spNotification = context.getSharedPreferences("settings" , Context.MODE_PRIVATE)
-        selectedNotification = spNotification.getString("selectedNotification" , "" ).toString()
-        sharedPreferencesCancel = context.getSharedPreferences("ALert" , Context.MODE_PRIVATE)
-        cancelNotification = sharedPreferencesCancel.getString("cancelAlarm" , "" ).toString()
-        if (selectedNotification == "disable" ) {
-            //notification is disable
-        }
-        else if (cancelNotification == "cancel"){
-            //notification is cancel
-        }
-        else
-        {
-            playSong(context)
-            CoroutineScope(Dispatchers.IO).launch {
-                val weather = getAlertNotification(context)
-                val i = Intent(context, MainActivity::class.java)
+//        spNotification = context.getSharedPreferences("settings" , Context.MODE_PRIVATE)
+//        selectedNotification = spNotification.getString("selectedNotification" , "" ).toString()
+//        sharedPreferencesCancel = context.getSharedPreferences("ALert" , Context.MODE_PRIVATE)
+//        cancelNotification = sharedPreferencesCancel.getString("cancelAlarm" , "" ).toString()
+//        if (selectedNotification == "disable" ) {
+//            //notification is disable
+//        }
+//        else if (cancelNotification == "cancel"){
+//            //notification is cancel
+//        }
+//        else
+//        {}
 
-                val newIntent = i.apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                }
+        playSong(context)
+        CoroutineScope(Dispatchers.IO).launch {
+            val weather = getAlertNotification(context)
+            val i = Intent(context, MainActivity::class.java)
 
-                val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, newIntent,
-                    PendingIntent.FLAG_IMMUTABLE)
-
-                val bigTextStyle = NotificationCompat.BigTextStyle()
-                bigTextStyle.bigText(weather.alerts?.get(0)?.description)
-                bigTextStyle.setBigContentTitle(weather.timezone.split("/")[1])
-
-                val notification = NotificationCompat.Builder(context, channelID)
-                    .setSmallIcon(R.drawable.ic_alert)
-                    .setContentTitle(weather.timezone.split("/")[1])
-                    .setContentText(weather.alerts?.get(0)?.description)
-                    .setStyle(bigTextStyle)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .build()
-
-                val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-                manager.notify(notificationID, notification)
+            val newIntent = i.apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
+
+            val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, newIntent,
+                PendingIntent.FLAG_IMMUTABLE)
+
+            val bigTextStyle = NotificationCompat.BigTextStyle()
+            bigTextStyle.bigText(weather.alerts?.get(0)?.description)
+            bigTextStyle.setBigContentTitle(weather.timezone.split("/")[1])
+
+            val notification = NotificationCompat.Builder(context, channelID)
+                .setSmallIcon(R.drawable.ic_alert)
+                .setContentTitle(weather.timezone.split("/")[1])
+                .setContentText(weather.alerts?.get(0)?.description)
+                .setStyle(bigTextStyle)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .build()
+
+            val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            manager.notify(notificationID, notification)
         }
-
-
-
     }
+
+
+
+
+
 
     private fun playSong(context: Context) {
         mediaPlayer = MediaPlayer.create(context, R.raw.alarm_sound)
         mediaPlayer?.start()
     }
 
+    @SuppressLint("LogNotTimber")
     private suspend fun getAlertNotification(context: Context): Model {
         sharedPreferencesLocation =
             context.getSharedPreferences("locationKey", Context.MODE_PRIVATE)
