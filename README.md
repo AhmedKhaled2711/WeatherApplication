@@ -1,5 +1,6 @@
 <h1>Weather App 🌦️</h1>
-Welcome to Weather App, a comprehensive weather application developed by [Your Name/Team Name]. This app provides up-to-date weather information, notifications for weather alerts, and a seamless user experience.
+I'm thrilled to showcase the Weather App, a comprehensive weather application developed using the latest tools and technologies in Android development. Here's a quick overview of what makes this app special.
+
 <h2>Tools Used:</h2>
   <li>Kotlin</li>
   <li>MVVM Architecture</li>
